@@ -103,11 +103,14 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
           </div>
 
           <div className="lg:col-span-5 relative h-56 sm:h-96 lg:h-full flex items-center justify-center p-4 sm:p-6">
-            <div className="relative w-full max-w-xs sm:max-w-md aspect-square">
+            <div
+              onClick={() => onNavigate('products', { filter: 'new' })}
+              className="relative w-full max-w-xs sm:max-w-md aspect-square cursor-pointer group active:scale-95 transition-transform"
+            >
               <img
                 src="https://images.unsplash.com/photo-1552346154-21d32810aba3?w=900&auto=format&fit=crop&q=80"
                 alt="Featured Sneaker"
-                className="w-full h-full object-cover rounded-3xl shadow-2xl border border-neutral-800 rotate-2 hover:rotate-0 transition-transform duration-500"
+                className="w-full h-full object-cover rounded-3xl shadow-2xl border border-neutral-800 rotate-2 group-hover:rotate-0 transition-transform duration-500"
                 referrerPolicy="no-referrer"
               />
               <div className="absolute -bottom-3 -left-3 bg-neutral-900/95 backdrop-blur-md p-3 sm:p-4 rounded-2xl border border-neutral-700 shadow-xl hidden sm:block">
@@ -394,13 +397,20 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
             </div>
           </div>
 
-          <div className="relative">
+          <div
+            onClick={() => onNavigate('membership')}
+            className="relative cursor-pointer group overflow-hidden rounded-2xl active:scale-95 transition-transform"
+          >
             <img
               src="https://images.unsplash.com/photo-1549298916-b41d501d3772?w=800&auto=format&fit=crop&q=80"
               alt="Authenticity Inspection"
-              className="w-full h-56 sm:h-80 object-cover rounded-2xl shadow-xl"
+              className="w-full h-56 sm:h-80 object-cover rounded-2xl shadow-xl group-hover:scale-105 transition-transform duration-500"
               referrerPolicy="no-referrer"
             />
+            <div className="absolute bottom-3 right-3 bg-neutral-900/90 text-white text-[11px] font-bold px-3 py-1.5 rounded-xl flex items-center gap-1.5 shadow-lg">
+              <span>Xem đặc quyền PY</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </div>
           </div>
         </div>
       </section>

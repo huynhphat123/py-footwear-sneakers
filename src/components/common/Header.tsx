@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { useShop } from '../../context/ShopContext';
 import { ThemeToggle } from './ThemeToggle';
 import {
@@ -9,15 +10,18 @@ import {
   Menu,
   X,
   ChevronDown,
+  ChevronRight,
   ShieldCheck,
   Truck,
   MapPin,
   Gift,
   Flame,
+  Sparkles,
   Clock,
   LogOut,
   LayoutDashboard,
   Package,
+  Layers,
 } from 'lucide-react';
 
 interface HeaderProps {
@@ -43,6 +47,7 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, onOpenAdmin, current
 
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileCategoriesOpen, setMobileCategoriesOpen] = useState(true);
   const [accountDropdownOpen, setAccountDropdownOpen] = useState(false);
   const [brandDropdownOpen, setBrandDropdownOpen] = useState(false);
   const [categoryDropdownOpen, setCategoryDropdownOpen] = useState(false);
@@ -50,6 +55,18 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, onOpenAdmin, current
   const accountRef = useRef<HTMLDivElement>(null);
   const brandRef = useRef<HTMLDivElement>(null);
   const catRef = useRef<HTMLDivElement>(null);
+
+  // Lock body scroll when mobile drawer is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [mobileMenuOpen]);
 
   // Detect scroll
   useEffect(() => {
@@ -548,18 +565,27 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, onOpenAdmin, current
         </div>
       </div>
 
-      {/* 3. MOBILE SLIDE-OUT MENU DRAWER */}
-      {mobileMenuOpen && (
-        <div className="fixed inset-0 z-[100] lg:hidden flex">
+      {/* 3. MOBILE SLIDE-OUT MENU DRAWER (Mounted directly to document.body via Portal) */}
+      {mobileMenuOpen && typeof document !== 'undefined' && createPortal(
+        <div className="fixed inset-0 z-[99999] lg:hidden flex">
+          {/* Overlay */}
           <div
-            className="fixed inset-0 bg-neutral-950/70 backdrop-blur-sm transition-opacity duration-300 animate-in fade-in"
+            className="fixed inset-0 bg-neutral-950/75 backdrop-blur-sm transition-opacity duration-300 animate-in fade-in"
             onClick={() => setMobileMenuOpen(false)}
           />
-          <div className="relative ml-0 flex flex-col w-full max-w-xs bg-white dark:bg-[#141414] h-full shadow-2xl p-5 overflow-y-auto border-r border-neutral-200 dark:border-neutral-800 animate-in slide-in-from-left duration-300">
+
+          {/* Slide Drawer Content */}
+          <div className="relative ml-0 flex flex-col w-[85%] max-w-xs bg-white dark:bg-[#141414] h-full shadow-2xl p-5 overflow-y-auto border-r border-neutral-200 dark:border-neutral-800 animate-in slide-in-from-left duration-300 z-10">
             
             {/* Header / Brand & Close */}
-            <div className="flex items-center justify-between pb-4 border-b border-neutral-100 dark:border-neutral-800">
-              <div className="flex items-center gap-2.5">
+            <div className="flex items-center justify-between pb-4 border-b border-neutral-100 dark:border-neutral-800 shrink-0">
+              <div
+                className="flex items-center gap-2.5 cursor-pointer"
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  onNavigate('home');
+                }}
+              >
                 <div className="w-9 h-9 bg-neutral-950 dark:bg-white text-white dark:text-neutral-950 rounded-xl flex items-center justify-center font-extrabold text-base shadow-sm">
                   PY
                 </div>
@@ -574,15 +600,16 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, onOpenAdmin, current
               </div>
               <button
                 id="mobile-close-btn"
+                type="button"
                 onClick={() => setMobileMenuOpen(false)}
-                className="p-2 rounded-xl text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+                className="p-2 rounded-xl text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             {/* User Profile Card / Login Prompt in Drawer */}
-            <div className="py-4 border-b border-neutral-100 dark:border-neutral-800">
+            <div className="py-4 border-b border-neutral-100 dark:border-neutral-800 shrink-0">
               {currentUser ? (
                 <div className="p-3 bg-neutral-50 dark:bg-neutral-900/90 rounded-2xl border border-neutral-200/80 dark:border-neutral-800 flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl bg-neutral-950 dark:bg-white text-white dark:text-neutral-950 font-extrabold text-sm flex items-center justify-center shadow-sm">
@@ -611,23 +638,25 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, onOpenAdmin, current
                   <div className="grid grid-cols-2 gap-2 pt-1">
                     <button
                       id="mob-login-btn"
+                      type="button"
                       onClick={() => {
                         setMobileMenuOpen(false);
                         setAuthModalMode('login');
                         setIsAuthModalOpen(true);
                       }}
-                      className="py-2 bg-white text-neutral-950 font-bold text-xs rounded-xl shadow-sm hover:bg-neutral-100 transition-colors"
+                      className="py-2 bg-white text-neutral-950 font-bold text-xs rounded-xl shadow-sm hover:bg-neutral-100 transition-colors text-center cursor-pointer"
                     >
                       Đăng nhập
                     </button>
                     <button
                       id="mob-register-btn"
+                      type="button"
                       onClick={() => {
                         setMobileMenuOpen(false);
                         setAuthModalMode('register');
                         setIsAuthModalOpen(true);
                       }}
-                      className="py-2 bg-neutral-800 text-white font-bold text-xs rounded-xl hover:bg-neutral-700 transition-colors"
+                      className="py-2 bg-neutral-800 text-white font-bold text-xs rounded-xl hover:bg-neutral-700 transition-colors text-center cursor-pointer"
                     >
                       Đăng ký
                     </button>
@@ -637,7 +666,7 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, onOpenAdmin, current
             </div>
 
             {/* Mobile Theme Toggle Section */}
-            <div className="py-3 border-b border-neutral-100 dark:border-neutral-800">
+            <div className="py-3 border-b border-neutral-100 dark:border-neutral-800 shrink-0">
               <ThemeToggle id="mobile-theme-toggle-btn" variant="expanded" />
             </div>
 
@@ -645,11 +674,12 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, onOpenAdmin, current
             <div className="py-3 flex flex-col space-y-1">
               <button
                 id="mob-nav-sale-btn"
+                type="button"
                 onClick={() => {
                   setMobileMenuOpen(false);
                   onNavigate('products', { filter: 'sale' });
                 }}
-                className="flex items-center justify-between py-2.5 px-3 rounded-xl font-bold text-xs text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/30 hover:bg-rose-100 dark:hover:bg-rose-950/50 transition-colors"
+                className="flex items-center justify-between py-2.5 px-3 rounded-xl font-bold text-xs text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/30 hover:bg-rose-100 dark:hover:bg-rose-950/50 transition-colors cursor-pointer"
               >
                 <span className="flex items-center gap-2.5">
                   <Flame className="w-4 h-4 text-rose-600 dark:text-rose-400 animate-pulse" />
@@ -660,35 +690,83 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, onOpenAdmin, current
 
               <button
                 id="mob-nav-new-btn"
+                type="button"
                 onClick={() => {
                   setMobileMenuOpen(false);
                   onNavigate('products', { filter: 'new' });
                 }}
-                className="flex items-center gap-2.5 py-2.5 px-3 rounded-xl font-bold text-xs text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors text-left"
+                className="flex items-center gap-2.5 py-2.5 px-3 rounded-xl font-bold text-xs text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors text-left cursor-pointer"
               >
                 <Sparkles className="w-4 h-4 text-amber-500" />
                 <span>HÀNG MỚI VỀ</span>
               </button>
 
               <button
-                id="mob-nav-brands-btn"
+                id="mob-nav-bestseller-btn"
+                type="button"
                 onClick={() => {
                   setMobileMenuOpen(false);
-                  onNavigate('products');
+                  onNavigate('products', { filter: 'bestseller' });
                 }}
-                className="flex items-center gap-2.5 py-2.5 px-3 rounded-xl font-semibold text-xs text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors text-left"
+                className="flex items-center gap-2.5 py-2.5 px-3 rounded-xl font-bold text-xs text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors text-left cursor-pointer"
               >
-                <Package className="w-4 h-4 text-neutral-500" />
-                <span>TẤT CẢ SẢN PHẨM</span>
+                <Layers className="w-4 h-4 text-sky-500" />
+                <span>BÁN CHẠY NHẤT</span>
               </button>
+
+              {/* Categories Accordion */}
+              <div className="pt-1">
+                <button
+                  type="button"
+                  onClick={() => setMobileCategoriesOpen(prev => !prev)}
+                  className="w-full flex items-center justify-between py-2.5 px-3 rounded-xl font-bold text-xs text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors text-left cursor-pointer"
+                >
+                  <span className="flex items-center gap-2.5">
+                    <Package className="w-4 h-4 text-neutral-500" />
+                    <span>DANH MỤC SẢN PHẨM</span>
+                  </span>
+                  <ChevronDown className={`w-4 h-4 transition-transform ${mobileCategoriesOpen ? 'rotate-180' : ''}`} />
+                </button>
+
+                {mobileCategoriesOpen && (
+                  <div className="pl-4 pr-1 py-1 space-y-1">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setMobileMenuOpen(false);
+                        onNavigate('products');
+                      }}
+                      className="w-full text-left py-2 px-3 rounded-lg text-xs font-semibold text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 flex items-center justify-between"
+                    >
+                      <span>Tất cả sản phẩm</span>
+                      <ChevronRight className="w-3.5 h-3.5 text-neutral-400" />
+                    </button>
+                    {categories.map(c => (
+                      <button
+                        key={c.id}
+                        type="button"
+                        onClick={() => {
+                          setMobileMenuOpen(false);
+                          onNavigate('products', { category: c.slug });
+                        }}
+                        className="w-full text-left py-2 px-3 rounded-lg text-xs font-semibold text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 flex items-center justify-between"
+                      >
+                        <span>{c.name}</span>
+                        <ChevronRight className="w-3.5 h-3.5 text-neutral-400" />
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
 
               <button
                 id="mob-nav-membership-btn"
+                type="button"
                 onClick={() => {
                   setMobileMenuOpen(false);
                   onNavigate('membership');
                 }}
-                className="flex items-center gap-2.5 py-2.5 px-3 rounded-xl font-semibold text-xs text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors text-left"
+                className="flex items-center gap-2.5 py-2.5 px-3 rounded-xl font-semibold text-xs text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors text-left cursor-pointer"
               >
                 <ShieldCheck className="w-4 h-4 text-emerald-500" />
                 <span>HỘI VIÊN & ĐẶC QUYỀN</span>
@@ -696,11 +774,12 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, onOpenAdmin, current
 
               <button
                 id="mob-nav-giftcard-btn"
+                type="button"
                 onClick={() => {
                   setMobileMenuOpen(false);
                   onNavigate('giftcard');
                 }}
-                className="flex items-center gap-2.5 py-2.5 px-3 rounded-xl font-semibold text-xs text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors text-left"
+                className="flex items-center gap-2.5 py-2.5 px-3 rounded-xl font-semibold text-xs text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors text-left cursor-pointer"
               >
                 <Gift className="w-4 h-4 text-amber-500" />
                 <span>THẺ QUÀ TẶNG GIFT CARD</span>
@@ -708,11 +787,12 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, onOpenAdmin, current
 
               <button
                 id="mob-nav-stores-btn"
+                type="button"
                 onClick={() => {
                   setMobileMenuOpen(false);
                   onNavigate('stores');
                 }}
-                className="flex items-center gap-2.5 py-2.5 px-3 rounded-xl font-semibold text-xs text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors text-left"
+                className="flex items-center gap-2.5 py-2.5 px-3 rounded-xl font-semibold text-xs text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors text-left cursor-pointer"
               >
                 <MapPin className="w-4 h-4 text-neutral-500" />
                 <span>HỆ THỐNG 4 CỬA HÀNG</span>
@@ -720,11 +800,12 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, onOpenAdmin, current
 
               <button
                 id="mob-nav-blog-btn"
+                type="button"
                 onClick={() => {
                   setMobileMenuOpen(false);
                   onNavigate('blog');
                 }}
-                className="flex items-center gap-2.5 py-2.5 px-3 rounded-xl font-semibold text-xs text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors text-left"
+                className="flex items-center gap-2.5 py-2.5 px-3 rounded-xl font-semibold text-xs text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors text-left cursor-pointer"
               >
                 <Clock className="w-4 h-4 text-neutral-500" />
                 <span>TIN TỨC & BẢNG CHỌN SIZE</span>
@@ -732,7 +813,7 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, onOpenAdmin, current
             </div>
 
             {/* Popular Brands Shortcuts */}
-            <div className="py-3 border-t border-neutral-100 dark:border-neutral-800">
+            <div className="py-3 border-t border-neutral-100 dark:border-neutral-800 shrink-0">
               <div className="text-[11px] font-bold text-neutral-400 dark:text-neutral-500 uppercase tracking-wider mb-2">
                 Thương hiệu nổi bật
               </div>
@@ -740,11 +821,12 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, onOpenAdmin, current
                 {brands.slice(0, 4).map(b => (
                   <button
                     key={b.id}
+                    type="button"
                     onClick={() => {
                       setMobileMenuOpen(false);
                       onNavigate('products', { brand: b.slug });
                     }}
-                    className="p-2 rounded-xl bg-neutral-50 dark:bg-neutral-900 border border-neutral-200/80 dark:border-neutral-800 flex flex-col items-center hover:border-neutral-950 dark:hover:border-white transition-all"
+                    className="p-2 rounded-xl bg-neutral-50 dark:bg-neutral-900 border border-neutral-200/80 dark:border-neutral-800 flex flex-col items-center hover:border-neutral-950 dark:hover:border-white transition-all cursor-pointer"
                   >
                     <img
                       src={b.logo}
@@ -762,16 +844,17 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, onOpenAdmin, current
 
             {/* User Account Drawer Actions */}
             {currentUser && (
-              <div className="mt-auto pt-3 border-t border-neutral-100 dark:border-neutral-800 space-y-2">
+              <div className="mt-auto pt-3 border-t border-neutral-100 dark:border-neutral-800 space-y-2 shrink-0">
                 {isAdmin && (
                   <button
                     id="mob-admin-btn"
+                    type="button"
                     onClick={() => {
                       setMobileMenuOpen(false);
                       if (onOpenAdmin) onOpenAdmin();
                       else onNavigate('admin');
                     }}
-                    className="w-full py-2.5 bg-amber-50 dark:bg-amber-950/60 text-amber-900 dark:text-amber-300 text-xs font-bold rounded-xl flex items-center justify-center gap-2 border border-amber-200/50 dark:border-amber-800/50"
+                    className="w-full py-2.5 bg-amber-50 dark:bg-amber-950/60 text-amber-900 dark:text-amber-300 text-xs font-bold rounded-xl flex items-center justify-center gap-2 border border-amber-200/50 dark:border-amber-800/50 cursor-pointer"
                   >
                     <LayoutDashboard className="w-4 h-4" />
                     <span>Trang Quản Trị (Admin)</span>
@@ -779,21 +862,23 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, onOpenAdmin, current
                 )}
                 <div className="grid grid-cols-2 gap-2">
                   <button
+                    type="button"
                     onClick={() => {
                       setMobileMenuOpen(false);
                       onNavigate('profile');
                     }}
-                    className="py-2 px-3 bg-neutral-100 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 text-xs font-semibold rounded-xl text-center hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors"
+                    className="py-2 px-3 bg-neutral-100 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 text-xs font-semibold rounded-xl text-center hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors cursor-pointer"
                   >
                     Hồ sơ cá nhân
                   </button>
                   <button
                     id="mob-logout-btn"
+                    type="button"
                     onClick={() => {
                       setMobileMenuOpen(false);
                       logout();
                     }}
-                    className="py-2 px-3 bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 text-xs font-semibold rounded-xl text-center hover:bg-rose-100 transition-colors"
+                    className="py-2 px-3 bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 text-xs font-semibold rounded-xl text-center hover:bg-rose-100 transition-colors cursor-pointer"
                   >
                     Đăng xuất
                   </button>
@@ -802,7 +887,8 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, onOpenAdmin, current
             )}
 
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </header>
   );
