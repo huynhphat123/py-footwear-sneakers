@@ -548,26 +548,88 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, onOpenAdmin, current
       {mobileMenuOpen && (
         <div className="fixed inset-0 z-50 lg:hidden flex">
           <div
-            className="fixed inset-0 bg-neutral-950/60 backdrop-blur-sm transition-opacity"
+            className="fixed inset-0 bg-neutral-950/70 backdrop-blur-sm transition-opacity duration-300 animate-in fade-in"
             onClick={() => setMobileMenuOpen(false)}
           />
-          <div className="relative ml-0 flex flex-col w-full max-w-xs bg-white dark:bg-[#141414] h-full shadow-2xl p-6 overflow-y-auto border-r border-neutral-200 dark:border-neutral-800">
+          <div className="relative ml-0 flex flex-col w-full max-w-xs bg-white dark:bg-[#141414] h-full shadow-2xl p-5 overflow-y-auto border-r border-neutral-200 dark:border-neutral-800 animate-in slide-in-from-left duration-300">
+            
+            {/* Header / Brand & Close */}
             <div className="flex items-center justify-between pb-4 border-b border-neutral-100 dark:border-neutral-800">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 bg-neutral-950 dark:bg-white text-white dark:text-neutral-950 rounded-lg flex items-center justify-center font-bold text-sm">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 bg-neutral-950 dark:bg-white text-white dark:text-neutral-950 rounded-xl flex items-center justify-center font-extrabold text-base shadow-sm">
                   PY
                 </div>
-                <span className="font-extrabold text-lg text-neutral-950 dark:text-white font-['Space_Grotesk']">
-                  PY
-                </span>
+                <div>
+                  <div className="font-extrabold text-base text-neutral-950 dark:text-white font-['Space_Grotesk'] leading-none">
+                    PY SNEAKERS
+                  </div>
+                  <div className="text-[9px] uppercase tracking-widest text-neutral-400 font-semibold mt-0.5">
+                    Official Store
+                  </div>
+                </div>
               </div>
               <button
                 id="mobile-close-btn"
                 onClick={() => setMobileMenuOpen(false)}
-                className="p-2 rounded-lg text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200"
+                className="p-2 rounded-xl text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
               >
-                <X className="w-6 h-6" />
+                <X className="w-5 h-5" />
               </button>
+            </div>
+
+            {/* User Profile Card / Login Prompt in Drawer */}
+            <div className="py-4 border-b border-neutral-100 dark:border-neutral-800">
+              {currentUser ? (
+                <div className="p-3 bg-neutral-50 dark:bg-neutral-900/90 rounded-2xl border border-neutral-200/80 dark:border-neutral-800 flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-neutral-950 dark:bg-white text-white dark:text-neutral-950 font-extrabold text-sm flex items-center justify-center shadow-sm">
+                    {currentUser.name.charAt(0).toUpperCase()}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="text-xs font-bold text-neutral-950 dark:text-white truncate">
+                      {currentUser.name}
+                    </div>
+                    <div className="text-[11px] text-neutral-500 dark:text-neutral-400 truncate">
+                      {currentUser.email}
+                    </div>
+                    <div className="flex items-center gap-1.5 mt-1">
+                      <span className="text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300">
+                        {currentUser.role === 'admin' ? 'Quản trị viên' : 'Hội viên'}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="p-3.5 bg-gradient-to-br from-neutral-900 to-neutral-950 text-white rounded-2xl shadow-md space-y-2.5">
+                  <div>
+                    <div className="text-xs font-extrabold">Chào mừng bạn đến với PY!</div>
+                    <div className="text-[11px] text-neutral-300 mt-0.5">Đăng nhập để xem ưu đãi và tích điểm hội viên</div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 pt-1">
+                    <button
+                      id="mob-login-btn"
+                      onClick={() => {
+                        setMobileMenuOpen(false);
+                        setAuthModalMode('login');
+                        setIsAuthModalOpen(true);
+                      }}
+                      className="py-2 bg-white text-neutral-950 font-bold text-xs rounded-xl shadow-sm hover:bg-neutral-100 transition-colors"
+                    >
+                      Đăng nhập
+                    </button>
+                    <button
+                      id="mob-register-btn"
+                      onClick={() => {
+                        setMobileMenuOpen(false);
+                        setAuthModalMode('register');
+                        setIsAuthModalOpen(true);
+                      }}
+                      className="py-2 bg-neutral-800 text-white font-bold text-xs rounded-xl hover:bg-neutral-700 transition-colors"
+                    >
+                      Đăng ký
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Mobile Theme Toggle Section */}
@@ -575,19 +637,21 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, onOpenAdmin, current
               <ThemeToggle id="mobile-theme-toggle-btn" variant="expanded" />
             </div>
 
-            <div className="py-4 flex flex-col space-y-1">
+            {/* Mobile Nav Links */}
+            <div className="py-3 flex flex-col space-y-1">
               <button
                 id="mob-nav-sale-btn"
                 onClick={() => {
                   setMobileMenuOpen(false);
                   onNavigate('products', { filter: 'sale' });
                 }}
-                className="flex items-center justify-between py-3 px-3 rounded-xl font-bold text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/30"
+                className="flex items-center justify-between py-2.5 px-3 rounded-xl font-bold text-xs text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/30 hover:bg-rose-100 dark:hover:bg-rose-950/50 transition-colors"
               >
-                <span className="flex items-center gap-2">
-                  <Flame className="w-4 h-4" /> SALE KHỦNG
+                <span className="flex items-center gap-2.5">
+                  <Flame className="w-4 h-4 text-rose-600 dark:text-rose-400 animate-pulse" />
+                  <span>SĂN SALE KHỦNG</span>
                 </span>
-                <span className="text-[10px] bg-rose-600 text-white px-2 py-0.5 rounded font-bold">HOT</span>
+                <span className="text-[10px] bg-rose-600 text-white px-2 py-0.5 rounded-full font-extrabold">-40%</span>
               </button>
 
               <button
@@ -596,9 +660,10 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, onOpenAdmin, current
                   setMobileMenuOpen(false);
                   onNavigate('products', { filter: 'new' });
                 }}
-                className="py-3 px-3 rounded-xl font-semibold text-neutral-900 dark:text-neutral-100 text-left hover:bg-neutral-50 dark:hover:bg-neutral-800"
+                className="flex items-center gap-2.5 py-2.5 px-3 rounded-xl font-bold text-xs text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors text-left"
               >
-                HÀNG MỚI VỀ
+                <Sparkles className="w-4 h-4 text-amber-500" />
+                <span>HÀNG MỚI VỀ</span>
               </button>
 
               <button
@@ -607,20 +672,10 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, onOpenAdmin, current
                   setMobileMenuOpen(false);
                   onNavigate('products');
                 }}
-                className="py-3 px-3 rounded-xl font-semibold text-neutral-900 dark:text-neutral-100 text-left hover:bg-neutral-50 dark:hover:bg-neutral-800"
+                className="flex items-center gap-2.5 py-2.5 px-3 rounded-xl font-semibold text-xs text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors text-left"
               >
-                THƯƠNG HIỆU
-              </button>
-
-              <button
-                id="mob-nav-categories-btn"
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  onNavigate('products');
-                }}
-                className="py-3 px-3 rounded-xl font-semibold text-neutral-900 dark:text-neutral-100 text-left hover:bg-neutral-50 dark:hover:bg-neutral-800"
-              >
-                DANH MỤC SẢN PHẨM
+                <Package className="w-4 h-4 text-neutral-500" />
+                <span>TẤT CẢ SẢN PHẨM</span>
               </button>
 
               <button
@@ -629,9 +684,10 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, onOpenAdmin, current
                   setMobileMenuOpen(false);
                   onNavigate('membership');
                 }}
-                className="py-3 px-3 rounded-xl font-semibold text-neutral-900 dark:text-neutral-100 text-left hover:bg-neutral-50 dark:hover:bg-neutral-800"
+                className="flex items-center gap-2.5 py-2.5 px-3 rounded-xl font-semibold text-xs text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors text-left"
               >
-                HỘI VIÊN PY
+                <ShieldCheck className="w-4 h-4 text-emerald-500" />
+                <span>HỘI VIÊN & ĐẶC QUYỀN</span>
               </button>
 
               <button
@@ -640,10 +696,10 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, onOpenAdmin, current
                   setMobileMenuOpen(false);
                   onNavigate('giftcard');
                 }}
-                className="py-3 px-3 rounded-xl font-semibold text-neutral-900 dark:text-neutral-100 text-left hover:bg-neutral-50 dark:hover:bg-neutral-800 flex items-center gap-2"
+                className="flex items-center gap-2.5 py-2.5 px-3 rounded-xl font-semibold text-xs text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors text-left"
               >
                 <Gift className="w-4 h-4 text-amber-500" />
-                <span>GIFT CARD</span>
+                <span>THẺ QUÀ TẶNG GIFT CARD</span>
               </button>
 
               <button
@@ -652,10 +708,10 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, onOpenAdmin, current
                   setMobileMenuOpen(false);
                   onNavigate('stores');
                 }}
-                className="py-3 px-3 rounded-xl font-semibold text-neutral-900 dark:text-neutral-100 text-left hover:bg-neutral-50 dark:hover:bg-neutral-800 flex items-center gap-2"
+                className="flex items-center gap-2.5 py-2.5 px-3 rounded-xl font-semibold text-xs text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors text-left"
               >
                 <MapPin className="w-4 h-4 text-neutral-500" />
-                <span>HỆ THỐNG CỬA HÀNG</span>
+                <span>HỆ THỐNG 4 CỬA HÀNG</span>
               </button>
 
               <button
@@ -664,68 +720,83 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, onOpenAdmin, current
                   setMobileMenuOpen(false);
                   onNavigate('blog');
                 }}
-                className="py-3 px-3 rounded-xl font-semibold text-neutral-900 dark:text-neutral-100 text-left hover:bg-neutral-50 dark:hover:bg-neutral-800"
+                className="flex items-center gap-2.5 py-2.5 px-3 rounded-xl font-semibold text-xs text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors text-left"
               >
-                TIN TỨC & XU HƯỚNG
+                <Clock className="w-4 h-4 text-neutral-500" />
+                <span>TIN TỨC & BẢNG CHỌN SIZE</span>
               </button>
             </div>
 
-            <div className="mt-auto pt-4 border-t border-neutral-100 dark:border-neutral-800">
-              {currentUser ? (
-                <div className="space-y-2">
-                  <div className="text-xs font-bold text-neutral-900 dark:text-white">{currentUser.name}</div>
-                  <div className="text-xs text-neutral-500 dark:text-neutral-400">{currentUser.email}</div>
-                  {isAdmin && (
-                    <button
-                      id="mob-admin-btn"
-                      onClick={() => {
-                        setMobileMenuOpen(false);
-                        if (onOpenAdmin) onOpenAdmin();
-                        else onNavigate('admin');
-                      }}
-                      className="w-full py-2 bg-amber-50 dark:bg-amber-950/50 text-amber-900 dark:text-amber-300 text-xs font-bold rounded-xl"
-                    >
-                      Vào Admin Dashboard
-                    </button>
-                  )}
+            {/* Popular Brands Shortcuts */}
+            <div className="py-3 border-t border-neutral-100 dark:border-neutral-800">
+              <div className="text-[11px] font-bold text-neutral-400 dark:text-neutral-500 uppercase tracking-wider mb-2">
+                Thương hiệu nổi bật
+              </div>
+              <div className="grid grid-cols-4 gap-2">
+                {brands.slice(0, 4).map(b => (
+                  <button
+                    key={b.id}
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      onNavigate('products', { brand: b.slug });
+                    }}
+                    className="p-2 rounded-xl bg-neutral-50 dark:bg-neutral-900 border border-neutral-200/80 dark:border-neutral-800 flex flex-col items-center hover:border-neutral-950 dark:hover:border-white transition-all"
+                  >
+                    <img
+                      src={b.logo}
+                      alt={b.name}
+                      className="w-6 h-6 object-contain rounded"
+                      referrerPolicy="no-referrer"
+                    />
+                    <span className="text-[10px] font-bold text-neutral-800 dark:text-neutral-200 mt-1 truncate w-full text-center">
+                      {b.name}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* User Account Drawer Actions */}
+            {currentUser && (
+              <div className="mt-auto pt-3 border-t border-neutral-100 dark:border-neutral-800 space-y-2">
+                {isAdmin && (
+                  <button
+                    id="mob-admin-btn"
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      if (onOpenAdmin) onOpenAdmin();
+                      else onNavigate('admin');
+                    }}
+                    className="w-full py-2.5 bg-amber-50 dark:bg-amber-950/60 text-amber-900 dark:text-amber-300 text-xs font-bold rounded-xl flex items-center justify-center gap-2 border border-amber-200/50 dark:border-amber-800/50"
+                  >
+                    <LayoutDashboard className="w-4 h-4" />
+                    <span>Trang Quản Trị (Admin)</span>
+                  </button>
+                )}
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      onNavigate('profile');
+                    }}
+                    className="py-2 px-3 bg-neutral-100 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 text-xs font-semibold rounded-xl text-center hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors"
+                  >
+                    Hồ sơ cá nhân
+                  </button>
                   <button
                     id="mob-logout-btn"
                     onClick={() => {
                       setMobileMenuOpen(false);
                       logout();
                     }}
-                    className="w-full py-2 bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 text-xs font-semibold rounded-xl"
+                    className="py-2 px-3 bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 text-xs font-semibold rounded-xl text-center hover:bg-rose-100 transition-colors"
                   >
                     Đăng xuất
                   </button>
                 </div>
-              ) : (
-                <div className="flex flex-col gap-2">
-                  <button
-                    id="mob-login-btn"
-                    onClick={() => {
-                      setMobileMenuOpen(false);
-                      setAuthModalMode('login');
-                      setIsAuthModalOpen(true);
-                    }}
-                    className="w-full py-2.5 bg-neutral-950 dark:bg-white text-white dark:text-neutral-950 font-bold text-sm rounded-xl"
-                  >
-                    Đăng nhập
-                  </button>
-                  <button
-                    id="mob-register-btn"
-                    onClick={() => {
-                      setMobileMenuOpen(false);
-                      setAuthModalMode('register');
-                      setIsAuthModalOpen(true);
-                    }}
-                    className="w-full py-2.5 bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 font-bold text-sm rounded-xl"
-                  >
-                    Đăng ký tài khoản
-                  </button>
-                </div>
-              )}
-            </div>
+              </div>
+            )}
+
           </div>
         </div>
       )}

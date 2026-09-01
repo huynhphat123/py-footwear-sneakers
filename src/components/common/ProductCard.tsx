@@ -48,7 +48,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onNavigate })
     <div
       id={`product-card-${product.id}`}
       onClick={() => onNavigate('product-detail', { slug: product.slug })}
-      className="group relative bg-white dark:bg-[#1a1a1a] rounded-2xl sm:rounded-3xl border border-neutral-100 dark:border-neutral-800 overflow-hidden hover:shadow-xl dark:hover:shadow-neutral-950/50 hover:border-neutral-200 dark:hover:border-neutral-700 transition-all duration-300 flex flex-col cursor-pointer"
+      className="group relative bg-white dark:bg-[#1a1a1a] rounded-2xl sm:rounded-3xl border border-neutral-100 dark:border-neutral-800 overflow-hidden hover:shadow-xl dark:hover:shadow-neutral-950/50 hover:border-neutral-200 dark:hover:border-neutral-700 active:scale-[0.98] transition-all duration-200 flex flex-col cursor-pointer"
     >
       {/* IMAGE CONTAINER */}
       <div className="relative aspect-square w-full overflow-hidden bg-neutral-50 dark:bg-neutral-900">
@@ -61,20 +61,20 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onNavigate })
         />
 
         {/* BADGES */}
-        <div className="absolute top-3 left-3 flex flex-col gap-1.5 z-10 pointer-events-none">
+        <div className="absolute top-2 sm:top-3 left-2 sm:left-3 flex flex-col gap-1 z-10 pointer-events-none">
           {discountPercent > 0 && (
-            <span className="inline-flex items-center gap-1 bg-rose-600 text-white font-extrabold text-[10px] sm:text-xs px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-lg shadow-md">
-              <Flame className="w-3 h-3 hidden sm:inline" /> -{discountPercent}%
+            <span className="inline-flex items-center gap-1 bg-rose-600 text-white font-extrabold text-[9px] sm:text-xs px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded-md sm:rounded-lg shadow-sm">
+              <Flame className="w-2.5 h-2.5 sm:w-3 sm:h-3" /> -{discountPercent}%
             </span>
           )}
           {product.isNew && (
-            <span className="inline-flex items-center gap-1 bg-neutral-950 dark:bg-white text-white dark:text-neutral-950 font-extrabold text-[10px] sm:text-xs px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-lg shadow-md">
-              <Sparkles className="w-3 h-3 text-amber-400 dark:text-amber-500" /> NEW
+            <span className="inline-flex items-center gap-1 bg-neutral-950 dark:bg-white text-white dark:text-neutral-950 font-extrabold text-[9px] sm:text-xs px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded-md sm:rounded-lg shadow-sm">
+              <Sparkles className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-amber-400 dark:text-amber-500" /> NEW
             </span>
           )}
           {product.isBestSeller && !product.isNew && (
-            <span className="bg-amber-500 text-white font-extrabold text-[10px] sm:text-xs px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-lg shadow-md">
-              BEST SELLER
+            <span className="bg-amber-500 text-white font-extrabold text-[9px] sm:text-xs px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded-md sm:rounded-lg shadow-sm">
+              HOT
             </span>
           )}
         </div>
@@ -83,14 +83,14 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onNavigate })
         <button
           id={`wishlist-btn-${product.id}`}
           onClick={handleToggleWish}
-          className={`absolute top-3 right-3 z-10 p-2 sm:p-2.5 rounded-full backdrop-blur-md transition-all shadow-sm ${
+          className={`absolute top-2 sm:top-3 right-2 sm:right-3 z-10 p-1.5 sm:p-2.5 rounded-full backdrop-blur-md transition-all shadow-sm ${
             isInWishlist(product.id)
-              ? 'bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-800'
+              ? 'bg-rose-50/90 dark:bg-rose-950/80 text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-800'
               : 'bg-white/80 dark:bg-neutral-900/80 hover:bg-white dark:hover:bg-neutral-800 text-neutral-600 dark:text-neutral-300 hover:text-neutral-950 dark:hover:text-white'
           }`}
           aria-label="Wishlist"
         >
-          <Heart className={`w-4 h-4 ${isInWishlist(product.id) ? 'fill-current' : ''}`} />
+          <Heart className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${isInWishlist(product.id) ? 'fill-current' : ''}`} />
         </button>
 
         {/* QUICK ACTION HOVER OVERLAY (Desktop) */}
@@ -115,37 +115,37 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onNavigate })
       </div>
 
       {/* CONTENT */}
-      <div className="p-3.5 sm:p-5 flex-1 flex flex-col justify-between">
+      <div className="p-2.5 sm:p-5 flex-1 flex flex-col justify-between">
         <div>
           {/* Brand & Category */}
-          <div className="flex items-center justify-between text-[11px] font-bold text-neutral-400 dark:text-neutral-500 uppercase tracking-wider mb-1">
+          <div className="flex items-center justify-between text-[10px] sm:text-[11px] font-bold text-neutral-400 dark:text-neutral-500 uppercase tracking-wider mb-1">
             <span>{product.brandName}</span>
             <span>{product.gender === 'Unisex' ? 'Unisex' : product.gender === 'Men' ? 'Nam' : 'Nữ'}</span>
           </div>
 
           {/* Product Name */}
-          <h3 className="text-xs sm:text-sm font-bold text-neutral-900 dark:text-neutral-100 line-clamp-2 leading-snug group-hover:text-neutral-950 dark:group-hover:text-white transition-colors">
+          <h3 className="text-[11px] sm:text-sm font-bold text-neutral-900 dark:text-neutral-100 line-clamp-2 leading-tight sm:leading-snug group-hover:text-neutral-950 dark:group-hover:text-white transition-colors">
             {product.name}
           </h3>
 
           {/* Rating */}
-          <div className="flex items-center gap-1.5 mt-2">
+          <div className="flex items-center gap-1 mt-1 sm:mt-2">
             <div className="flex items-center text-amber-400">
-              <Star className="w-3.5 h-3.5 fill-current" />
+              <Star className="w-3 h-3 sm:w-3.5 sm:h-3.5 fill-current" />
             </div>
-            <span className="text-xs font-bold text-neutral-800 dark:text-neutral-200">{product.rating}</span>
-            <span className="text-[11px] text-neutral-400 dark:text-neutral-500">({product.reviewCount})</span>
+            <span className="text-[11px] sm:text-xs font-bold text-neutral-800 dark:text-neutral-200">{product.rating}</span>
+            <span className="text-[10px] sm:text-[11px] text-neutral-400 dark:text-neutral-500">({product.reviewCount})</span>
           </div>
         </div>
 
         {/* Price & Mobile Add Button */}
-        <div className="mt-3 pt-3 border-t border-neutral-100 dark:border-neutral-800 flex items-center justify-between">
+        <div className="mt-2.5 sm:mt-3 pt-2 sm:pt-3 border-t border-neutral-100 dark:border-neutral-800 flex items-center justify-between">
           <div className="flex flex-col">
             <span className="text-xs sm:text-base font-extrabold text-neutral-950 dark:text-white leading-none">
               {formatCurrency(currentPrice)}
             </span>
             {originalPrice > currentPrice && (
-              <span className="text-[11px] text-neutral-400 dark:text-neutral-500 line-through mt-1">
+              <span className="text-[10px] sm:text-[11px] text-neutral-400 dark:text-neutral-500 line-through mt-0.5 sm:mt-1">
                 {formatCurrency(originalPrice)}
               </span>
             )}
@@ -154,10 +154,10 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onNavigate })
           {/* Mobile Cart Trigger */}
           <button
             onClick={handleQuickView}
-            className="lg:hidden p-2 rounded-xl bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-white hover:bg-neutral-950 hover:text-white dark:hover:bg-white dark:hover:text-neutral-950 transition-colors"
+            className="lg:hidden p-1.5 sm:p-2 rounded-lg sm:rounded-xl bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-white hover:bg-neutral-950 hover:text-white dark:hover:bg-white dark:hover:text-neutral-950 transition-colors"
             title="Xem nhanh"
           >
-            <ShoppingBag className="w-4 h-4" />
+            <ShoppingBag className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </button>
         </div>
       </div>

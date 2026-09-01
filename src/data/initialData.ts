@@ -22,6 +22,15 @@ export const INITIAL_USERS: User[] = [
     isActive: true,
     createdAt: '2025-01-01T08:00:00Z',
   },
+  {
+    id: 'usr-cust-1',
+    name: 'Khách Hàng Mẫu',
+    email: 'khachhang@pyfootwear.vn',
+    phone: '0912345678',
+    role: 'customer',
+    isActive: true,
+    createdAt: '2025-01-02T08:00:00Z',
+  },
 ];
 
 export const INITIAL_BRANDS: Brand[] = [

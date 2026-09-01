@@ -71,7 +71,7 @@ interface ShopContextType {
   isInWishlist: (productId: string) => boolean;
 
   // Auth & Profile
-  login: (email: string, password?: string) => boolean;
+  login: (email: string, password?: string) => Promise<boolean> | boolean;
   logout: () => void;
   register: (name: string, email: string, phone: string, password?: string, role?: 'admin' | 'customer') => boolean;
   updateProfile: (updated: Partial<User>) => void;
@@ -399,17 +399,37 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const isInWishlist = (productId: string) => wishlist.includes(productId);
 
   // Auth
-  const login = (email: string, password?: string): boolean => {
-    const users = StorageService.getUsers();
+  const login = async (email: string, password?: string): Promise<boolean> => {
     const cleanEmail = email.trim().toLowerCase();
-    const user = users.find(u => u.email.toLowerCase() === cleanEmail);
+    if (!cleanEmail) {
+      showToast('Vui lòng nhập địa chỉ email.', 'error');
+      return false;
+    }
 
-    // Sync to MySQL API in background
-    ApiService.login(cleanEmail, password).catch(() => {});
+    // Try API login if server is active
+    try {
+      const apiRes = await ApiService.login(cleanEmail, password);
+      if (apiRes && apiRes.success && apiRes.user) {
+        StorageService.saveUser(apiRes.user);
+        StorageService.setCurrentUser(apiRes.user);
+        setCurrentUser(apiRes.user);
+        setIsAuthModalOpen(false);
+        showToast(`Chào mừng trở lại, ${apiRes.user.name}!`, 'success');
+        return true;
+      } else if (apiRes && apiRes.message && apiRes.success === false) {
+        showToast(apiRes.message, 'error');
+        return false;
+      }
+    } catch {
+      // Backend not running, fallback to storage
+    }
+
+    const users = StorageService.getUsers();
+    const user = users.find(u => u.email.toLowerCase() === cleanEmail);
 
     if (user) {
       if (!user.isActive) {
-        showToast('Tài khoản đã bị tạm khóa. Vui lòng liên hệ hỗ trợ.', 'error');
+        showToast('Tài khoản đã bị tạm khóa. Vui lòng liên hệ quản trị viên.', 'error');
         return false;
       }
       StorageService.setCurrentUser(user);
@@ -418,21 +438,8 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
       showToast(`Chào mừng trở lại, ${user.name}!`, 'success');
       return true;
     } else {
-      // Auto-create customer if not found for easy testing
-      const newUser: User = {
-        id: `usr-${Date.now()}`,
-        name: cleanEmail.split('@')[0],
-        email: cleanEmail,
-        role: cleanEmail.includes('admin') ? 'admin' : 'customer',
-        isActive: true,
-        createdAt: new Date().toISOString(),
-      };
-      StorageService.saveUser(newUser);
-      StorageService.setCurrentUser(newUser);
-      setCurrentUser(newUser);
-      setIsAuthModalOpen(false);
-      showToast(`Đăng nhập thành công với tài khoản ${newUser.name}!`, 'success');
-      return true;
+      showToast('Tài khoản chưa được đăng ký trong hệ thống. Vui lòng tạo tài khoản mới trước khi đăng nhập!', 'error');
+      return false;
     }
   };
 

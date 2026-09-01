@@ -43,74 +43,121 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
   const bestSellers = products.filter(p => p.isBestSeller).slice(0, 4);
 
   return (
-    <div className="space-y-12 sm:space-y-16 pb-16">
+    <div className="space-y-8 sm:space-y-16 pb-12 sm:pb-16">
       
+      {/* 0. MOBILE QUICK CATEGORY & BRAND CHIPS (Horizontal Scroll) */}
+      <section className="px-4 sm:px-6 lg:px-8 pt-2">
+        <div className="flex items-center gap-2.5 overflow-x-auto no-scrollbar py-1">
+          <button
+            onClick={() => onNavigate('products', { filter: 'sale' })}
+            className="flex items-center gap-1.5 px-3 py-2 rounded-2xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-rose-600 dark:text-rose-400 font-extrabold text-xs whitespace-nowrap shadow-sm active:scale-95 transition-all shrink-0"
+          >
+            <Flame className="w-3.5 h-3.5 animate-bounce" />
+            <span>Săn Sale -40%</span>
+          </button>
+
+          <button
+            onClick={() => onNavigate('products', { filter: 'new' })}
+            className="flex items-center gap-1.5 px-3 py-2 rounded-2xl bg-neutral-900 dark:bg-white text-white dark:text-neutral-950 font-extrabold text-xs whitespace-nowrap shadow-sm active:scale-95 transition-all shrink-0"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-amber-400 dark:text-amber-500" />
+            <span>Hàng Mới</span>
+          </button>
+
+          {brands.map(brand => (
+            <button
+              key={brand.id}
+              onClick={() => onNavigate('products', { brand: brand.slug })}
+              className="flex items-center gap-2 px-3 py-1.5 rounded-2xl bg-white dark:bg-[#1a1a1a] border border-neutral-200 dark:border-neutral-800 text-neutral-800 dark:text-neutral-200 font-bold text-xs whitespace-nowrap shadow-sm hover:border-neutral-900 dark:hover:border-white active:scale-95 transition-all shrink-0"
+            >
+              <img
+                src={brand.logo}
+                alt={brand.name}
+                className="w-4 h-4 object-contain rounded"
+                referrerPolicy="no-referrer"
+              />
+              <span>{brand.name}</span>
+            </button>
+          ))}
+
+          {categories.slice(0, 4).map(cat => (
+            <button
+              key={cat.id}
+              onClick={() => onNavigate('products', { category: cat.slug })}
+              className="px-3 py-2 rounded-2xl bg-neutral-100 dark:bg-neutral-800/80 text-neutral-700 dark:text-neutral-300 font-semibold text-xs whitespace-nowrap hover:bg-neutral-200 dark:hover:bg-neutral-700 active:scale-95 transition-all shrink-0"
+            >
+              {cat.name}
+            </button>
+          ))}
+        </div>
+      </section>
+
       {/* 1. HERO BANNER */}
-      <section className="relative overflow-hidden bg-neutral-950 text-white rounded-3xl mx-4 sm:mx-6 lg:mx-8 mt-4">
-        <div className="grid grid-cols-1 lg:grid-cols-12 min-h-[480px] sm:min-h-[540px] items-center">
+      <section className="relative overflow-hidden bg-neutral-950 text-white rounded-3xl mx-3 sm:mx-6 lg:mx-8 shadow-2xl">
+        <div className="grid grid-cols-1 lg:grid-cols-12 min-h-[420px] sm:min-h-[540px] items-center">
           
-          <div className="lg:col-span-7 p-6 sm:p-12 lg:p-16 space-y-6 z-10">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-neutral-800/80 border border-neutral-700 text-neutral-300 text-xs font-semibold">
+          <div className="lg:col-span-7 p-5 sm:p-12 lg:p-16 space-y-4 sm:space-y-6 z-10">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-neutral-800/90 border border-neutral-700 text-neutral-300 text-[11px] sm:text-xs font-semibold">
               <Sparkles className="w-3.5 h-3.5 text-amber-400" />
               <span>Bộ Sưu Tập Mới 2025 • Độc Quyền Chính Hãng</span>
             </div>
 
-            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight font-['Space_Grotesk'] leading-tight">
+            <h1 className="text-2xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight font-['Space_Grotesk'] leading-tight">
               NÂNG TẦM <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-neutral-200 to-neutral-500">
                 PHONG CÁCH SNEAKER
               </span>
             </h1>
 
-            <p className="text-neutral-400 text-sm sm:text-base max-w-lg leading-relaxed">
+            <p className="text-neutral-400 text-xs sm:text-base max-w-lg leading-relaxed">
               Trải nghiệm các bản phát hành kinh điển từ Nike, Jordan, Adidas và New Balance. 100% cam kết chính hãng với quy trình kiểm định nghiêm ngặt.
             </p>
 
-            <div className="flex flex-wrap items-center gap-3 pt-2">
+            <div className="flex flex-wrap items-center gap-2.5 sm:gap-3 pt-1 sm:pt-2">
               <button
                 id="hero-shop-now-btn"
                 onClick={() => onNavigate('products')}
-                className="px-6 py-3.5 bg-white text-neutral-950 font-extrabold text-xs sm:text-sm rounded-2xl hover:bg-neutral-200 transition-all flex items-center gap-2 shadow-xl group"
+                className="flex-1 sm:flex-none px-5 sm:px-6 py-3 sm:py-3.5 bg-white text-neutral-950 font-extrabold text-xs sm:text-sm rounded-2xl hover:bg-neutral-200 active:scale-95 transition-all flex items-center justify-center gap-2 shadow-xl group"
               >
-                <span>Khám Phá Bộ Sưu Tập</span>
+                <span>Khám Phá Ngay</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </button>
 
               <button
                 id="hero-sale-btn"
                 onClick={() => onNavigate('products', { filter: 'sale' })}
-                className="px-6 py-3.5 bg-neutral-900 border border-neutral-800 text-white font-extrabold text-xs sm:text-sm rounded-2xl hover:bg-neutral-800 transition-all flex items-center gap-2"
+                className="flex-1 sm:flex-none px-5 sm:px-6 py-3 sm:py-3.5 bg-neutral-900 border border-neutral-800 text-white font-extrabold text-xs sm:text-sm rounded-2xl hover:bg-neutral-800 active:scale-95 transition-all flex items-center justify-center gap-2"
               >
                 <Flame className="w-4 h-4 text-rose-500" />
                 <span>Săn Sale -40%</span>
               </button>
             </div>
 
-            <div className="grid grid-cols-3 gap-4 pt-4 border-t border-neutral-800/80 max-w-md text-xs">
+            <div className="grid grid-cols-3 gap-3 sm:gap-4 pt-3 sm:pt-4 border-t border-neutral-800/80 max-w-md text-xs">
               <div>
-                <div className="font-extrabold text-white text-lg sm:text-xl font-['Space_Grotesk']">10,000+</div>
-                <div className="text-neutral-400 text-[11px]">Đôi giày đã bán</div>
+                <div className="font-extrabold text-white text-base sm:text-xl font-['Space_Grotesk']">10,000+</div>
+                <div className="text-neutral-400 text-[10px] sm:text-[11px]">Đã bán</div>
               </div>
               <div>
-                <div className="font-extrabold text-white text-lg sm:text-xl font-['Space_Grotesk']">100%</div>
-                <div className="text-neutral-400 text-[11px]">Chính hãng Auth</div>
+                <div className="font-extrabold text-white text-base sm:text-xl font-['Space_Grotesk']">100%</div>
+                <div className="text-neutral-400 text-[10px] sm:text-[11px]">Chính hãng Auth</div>
               </div>
               <div>
-                <div className="font-extrabold text-white text-lg sm:text-xl font-['Space_Grotesk']">4.9/5★</div>
-                <div className="text-neutral-400 text-[11px]">Đánh giá tích cực</div>
+                <div className="font-extrabold text-white text-base sm:text-xl font-['Space_Grotesk']">4.9/5★</div>
+                <div className="text-neutral-400 text-[10px] sm:text-[11px]">Đánh giá tốt</div>
               </div>
             </div>
           </div>
 
-          <div className="lg:col-span-5 relative h-72 sm:h-96 lg:h-full flex items-center justify-center p-6">
-            <div className="relative w-full max-w-md aspect-square">
+          <div className="lg:col-span-5 relative h-56 sm:h-96 lg:h-full flex items-center justify-center p-4 sm:p-6">
+            <div className="relative w-full max-w-xs sm:max-w-md aspect-square">
               <img
                 src="https://images.unsplash.com/photo-1552346154-21d32810aba3?w=900&auto=format&fit=crop&q=80"
                 alt="Featured Sneaker"
                 className="w-full h-full object-cover rounded-3xl shadow-2xl border border-neutral-800 rotate-2 hover:rotate-0 transition-transform duration-500"
                 referrerPolicy="no-referrer"
               />
-              <div className="absolute -bottom-4 -left-4 bg-neutral-900/90 backdrop-blur-md p-4 rounded-2xl border border-neutral-700 shadow-xl hidden sm:block">
+              <div className="absolute -bottom-3 -left-3 bg-neutral-900/95 backdrop-blur-md p-3 sm:p-4 rounded-2xl border border-neutral-700 shadow-xl hidden sm:block">
                 <div className="text-[10px] uppercase font-bold text-amber-400">Đặc Quyền Hội Viên</div>
                 <div className="text-xs font-bold text-white mt-0.5">Tặng Voucher 150.000đ khi đăng ký</div>
               </div>
@@ -122,32 +169,32 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
 
       {/* 2. POPULAR BRANDS ROW */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-4 sm:mb-6">
           <div>
-            <h2 className="text-lg sm:text-xl font-extrabold text-neutral-950 uppercase tracking-tight font-['Space_Grotesk']">
+            <h2 className="text-base sm:text-xl font-extrabold text-neutral-950 dark:text-white uppercase tracking-tight font-['Space_Grotesk']">
               Thương Hiệu Hàng Đầu
             </h2>
-            <p className="text-xs text-neutral-500">Đối tác phân phối giày chính hãng toàn cầu</p>
+            <p className="text-[11px] sm:text-xs text-neutral-500 dark:text-neutral-400">Đối tác phân phối giày chính hãng toàn cầu</p>
           </div>
           <button
             id="see-all-brands-btn"
-            onClick={() => onNavigate('brands')}
-            className="text-xs font-bold text-neutral-900 hover:underline flex items-center gap-1"
+            onClick={() => onNavigate('products')}
+            className="text-xs font-bold text-neutral-900 dark:text-neutral-200 hover:underline flex items-center gap-1"
           >
             <span>Tất cả</span>
             <ChevronRight className="w-4 h-4" />
           </button>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3 sm:gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2.5 sm:gap-4">
           {brands.map(brand => (
             <button
               key={brand.id}
               id={`brand-card-${brand.slug}`}
               onClick={() => onNavigate('products', { brand: brand.slug })}
-              className="flex flex-col items-center justify-center p-4 bg-white rounded-2xl border border-neutral-100 hover:border-neutral-900 hover:shadow-md transition-all group"
+              className="flex flex-col items-center justify-center p-3 sm:p-4 bg-white dark:bg-[#1a1a1a] rounded-2xl border border-neutral-100 dark:border-neutral-800 hover:border-neutral-900 dark:hover:border-white hover:shadow-md transition-all group"
             >
-              <div className="w-12 h-12 rounded-xl overflow-hidden mb-2 flex items-center justify-center p-1 bg-neutral-50 border border-neutral-200 group-hover:scale-105 transition-transform">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl overflow-hidden mb-1.5 sm:mb-2 flex items-center justify-center p-1 bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 group-hover:scale-105 transition-transform">
                 <img
                   src={brand.logo}
                   alt={brand.name}
@@ -155,7 +202,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
                   referrerPolicy="no-referrer"
                 />
               </div>
-              <span className="text-xs font-bold text-neutral-900 group-hover:text-neutral-950 text-center truncate w-full">
+              <span className="text-[11px] sm:text-xs font-bold text-neutral-900 dark:text-neutral-100 group-hover:text-neutral-950 dark:group-hover:text-white text-center truncate w-full">
                 {brand.name}
               </span>
               <span className="text-[10px] text-neutral-400 font-medium">{brand.productCount || 6}+ mẫu</span>
@@ -165,43 +212,44 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
       </section>
 
       {/* 3. FLASH SALE SECTION */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-gradient-to-br from-rose-950 via-neutral-950 to-neutral-950 rounded-3xl p-6 sm:p-8 text-white">
+      <section className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+        <div className="bg-gradient-to-br from-rose-950 via-neutral-950 to-neutral-950 rounded-3xl p-4 sm:p-8 text-white shadow-xl">
           
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-rose-900/40">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 pb-4 sm:pb-6 border-b border-rose-900/40">
             <div className="flex items-center gap-3">
-              <div className="p-2.5 bg-rose-600 rounded-2xl shadow-lg">
-                <Flame className="w-6 h-6 text-white animate-bounce" />
+              <div className="p-2 sm:p-2.5 bg-rose-600 rounded-2xl shadow-lg shrink-0">
+                <Flame className="w-5 h-5 sm:w-6 sm:h-6 text-white animate-bounce" />
               </div>
               <div>
-                <h2 className="text-xl sm:text-2xl font-extrabold font-['Space_Grotesk'] tracking-tight">
+                <h2 className="text-lg sm:text-2xl font-extrabold font-['Space_Grotesk'] tracking-tight leading-tight">
                   FLASH SALE TRONG NGÀY
                 </h2>
-                <p className="text-xs text-rose-200/80">Số lượng có hạn • Giảm sâu lên đến 40%</p>
+                <p className="text-[11px] sm:text-xs text-rose-200/80">Số lượng có hạn • Giảm sâu lên đến 40%</p>
               </div>
             </div>
 
             {/* Countdown Timer */}
-            <div className="flex items-center gap-2">
-              <Clock className="w-4 h-4 text-rose-400" />
-              <span className="text-xs font-semibold text-neutral-300">Kết thúc sau:</span>
-              <div className="flex items-center gap-1 font-mono font-extrabold text-xs sm:text-sm">
-                <span className="px-2.5 py-1.5 bg-rose-900/80 border border-rose-700 rounded-lg text-white">
+            <div className="flex items-center gap-2 bg-neutral-900/80 sm:bg-transparent p-2 sm:p-0 rounded-xl border border-rose-900/30 sm:border-0">
+              <Clock className="w-4 h-4 text-rose-400 shrink-0" />
+              <span className="text-[11px] sm:text-xs font-semibold text-neutral-300">Kết thúc sau:</span>
+              <div className="flex items-center gap-1 font-mono font-extrabold text-xs sm:text-sm ml-auto sm:ml-0">
+                <span className="px-2 sm:px-2.5 py-1 sm:py-1.5 bg-rose-900/80 border border-rose-700 rounded-lg text-white">
                   {String(timeLeft.hours).padStart(2, '0')}
                 </span>
                 <span className="text-rose-400">:</span>
-                <span className="px-2.5 py-1.5 bg-rose-900/80 border border-rose-700 rounded-lg text-white">
+                <span className="px-2 sm:px-2.5 py-1 sm:py-1.5 bg-rose-900/80 border border-rose-700 rounded-lg text-white">
                   {String(timeLeft.minutes).padStart(2, '0')}
                 </span>
                 <span className="text-rose-400">:</span>
-                <span className="px-2.5 py-1.5 bg-rose-600 rounded-lg text-white animate-pulse">
+                <span className="px-2 sm:px-2.5 py-1 sm:py-1.5 bg-rose-600 rounded-lg text-white animate-pulse">
                   {String(timeLeft.seconds).padStart(2, '0')}
                 </span>
               </div>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mt-6">
+          {/* 2-column on mobile, 4-col on desktop */}
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-6 mt-4 sm:mt-6">
             {flashSaleProducts.map(prod => (
               <ProductCard key={prod.id} product={prod} onNavigate={onNavigate} />
             ))}
@@ -212,27 +260,28 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
 
       {/* 4. NEW ARRIVALS */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-4 sm:mb-6">
           <div>
-            <div className="flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-amber-500" />
-              <h2 className="text-lg sm:text-2xl font-extrabold text-neutral-950 uppercase tracking-tight font-['Space_Grotesk']">
+            <div className="flex items-center gap-1.5 sm:gap-2">
+              <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-amber-500" />
+              <h2 className="text-base sm:text-2xl font-extrabold text-neutral-950 dark:text-white uppercase tracking-tight font-['Space_Grotesk']">
                 HÀNG MỚI VỀ (NEW ARRIVALS)
               </h2>
             </div>
-            <p className="text-xs text-neutral-500">Những thiết kế mới nhất vừa lên kệ tuần này</p>
+            <p className="text-[11px] sm:text-xs text-neutral-500 dark:text-neutral-400">Những thiết kế mới nhất vừa lên kệ tuần này</p>
           </div>
           <button
             id="see-all-new-btn"
             onClick={() => onNavigate('products', { filter: 'new' })}
-            className="text-xs font-bold text-neutral-900 hover:underline flex items-center gap-1"
+            className="text-xs font-bold text-neutral-900 dark:text-neutral-200 hover:underline flex items-center gap-1"
           >
             <span>Xem tất cả</span>
             <ChevronRight className="w-4 h-4" />
           </button>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+        {/* 2-column on mobile, 4-col on desktop */}
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-6">
           {newArrivals.map(prod => (
             <ProductCard key={prod.id} product={prod} onNavigate={onNavigate} />
           ))}
@@ -241,22 +290,22 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
 
       {/* 5. CATEGORIES SHOWCASE GRID */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-xl mx-auto mb-8">
-          <h2 className="text-xl sm:text-2xl font-extrabold text-neutral-950 font-['Space_Grotesk'] uppercase">
+        <div className="text-center max-w-xl mx-auto mb-6 sm:mb-8">
+          <h2 className="text-lg sm:text-2xl font-extrabold text-neutral-950 dark:text-white font-['Space_Grotesk'] uppercase">
             DANH MỤC NỔI BẬT
           </h2>
-          <p className="text-xs text-neutral-500 mt-1">
+          <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">
             Lựa chọn kiểu dáng phù hợp với phong cách và hoạt động của bạn
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-6">
           {categories.slice(0, 6).map(cat => (
             <div
               key={cat.id}
               id={`category-banner-${cat.slug}`}
               onClick={() => onNavigate('products', { category: cat.slug })}
-              className="group relative h-64 rounded-3xl overflow-hidden cursor-pointer shadow-md"
+              className="group relative h-48 sm:h-64 rounded-3xl overflow-hidden cursor-pointer shadow-md"
             >
               <img
                 src={cat.image}
@@ -264,11 +313,11 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 referrerPolicy="no-referrer"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/90 via-neutral-950/40 to-transparent p-6 flex flex-col justify-end text-white">
-                <span className="text-[11px] uppercase font-bold text-amber-400 tracking-wider">Bộ sưu tập</span>
-                <h3 className="text-xl font-extrabold font-['Space_Grotesk'] mt-0.5">{cat.name}</h3>
+              <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/90 via-neutral-950/40 to-transparent p-5 sm:p-6 flex flex-col justify-end text-white">
+                <span className="text-[10px] sm:text-[11px] uppercase font-bold text-amber-400 tracking-wider">Bộ sưu tập</span>
+                <h3 className="text-lg sm:text-xl font-extrabold font-['Space_Grotesk'] mt-0.5">{cat.name}</h3>
                 <p className="text-xs text-neutral-300 line-clamp-1 mt-1">{cat.description}</p>
-                <div className="flex items-center gap-1.5 text-xs font-bold text-white mt-3 group-hover:underline">
+                <div className="flex items-center gap-1.5 text-xs font-bold text-white mt-2.5 sm:mt-3 group-hover:underline">
                   <span>Khám phá ngay</span>
                   <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                 </div>
@@ -280,27 +329,28 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
 
       {/* 6. BEST SELLERS */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-4 sm:mb-6">
           <div>
-            <div className="flex items-center gap-2">
-              <Award className="w-4 h-4 text-amber-500" />
-              <h2 className="text-lg sm:text-2xl font-extrabold text-neutral-950 uppercase tracking-tight font-['Space_Grotesk']">
+            <div className="flex items-center gap-1.5 sm:gap-2">
+              <Award className="w-4 h-4 sm:w-5 sm:h-5 text-amber-500" />
+              <h2 className="text-base sm:text-2xl font-extrabold text-neutral-950 dark:text-white uppercase tracking-tight font-['Space_Grotesk']">
                 SẢN PHẨM BÁN CHẠY NHẤT
               </h2>
             </div>
-            <p className="text-xs text-neutral-500">Các mẫu giày được cộng đồng sneaker săn đón nhiều nhất</p>
+            <p className="text-[11px] sm:text-xs text-neutral-500 dark:text-neutral-400">Các mẫu giày được cộng đồng sneaker săn đón nhiều nhất</p>
           </div>
           <button
             id="see-all-bestsellers-btn"
             onClick={() => onNavigate('products', { filter: 'bestseller' })}
-            className="text-xs font-bold text-neutral-900 hover:underline flex items-center gap-1"
+            className="text-xs font-bold text-neutral-900 dark:text-neutral-200 hover:underline flex items-center gap-1"
           >
             <span>Xem tất cả</span>
             <ChevronRight className="w-4 h-4" />
           </button>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+        {/* 2-column on mobile, 4-col on desktop */}
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-6">
           {bestSellers.map(prod => (
             <ProductCard key={prod.id} product={prod} onNavigate={onNavigate} />
           ))}
@@ -309,33 +359,33 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
 
       {/* 7. AUTHENTICITY & SERVICE BANNER */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-neutral-100 rounded-3xl p-8 sm:p-12 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-          <div className="space-y-4">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-neutral-200 text-neutral-800 text-xs font-bold">
+        <div className="bg-neutral-100 dark:bg-[#1a1a1a] rounded-3xl p-6 sm:p-12 grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 items-center border border-neutral-200/60 dark:border-neutral-800">
+          <div className="space-y-3.5 sm:space-y-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 text-neutral-800 dark:text-neutral-200 text-xs font-bold shadow-sm">
               <ShieldCheck className="w-4 h-4 text-emerald-600" />
               <span>Tiêu Chuẩn Kiểm Định PY Verify™</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-neutral-950 font-['Space_Grotesk'] leading-tight">
+            <h2 className="text-xl sm:text-3xl font-extrabold text-neutral-950 dark:text-white font-['Space_Grotesk'] leading-tight">
               CHÚNG TÔI NÓI KHÔNG VỚI HÀNG GIẢ & HÀNG KÉM CHẤT LƯỢNG
             </h2>
-            <p className="text-sm text-neutral-600 leading-relaxed">
+            <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">
               Mỗi đôi giày bán ra tại PY đều trải qua quy trình kiểm định 6 bước: từ mã barcode, chất liệu da, tem đế, đường may, phụ kiện đi kèm cho đến hộp nguyên bản.
             </p>
-            <div className="grid grid-cols-2 gap-3 text-xs font-semibold text-neutral-800 pt-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3 text-xs font-semibold text-neutral-800 dark:text-neutral-200 pt-1 sm:pt-2">
               <div className="flex items-center gap-2">
-                <CheckCircle className="w-4 h-4 text-emerald-600" />
+                <CheckCircle className="w-4 h-4 text-emerald-600 shrink-0" />
                 <span>Hoàn tiền 200% nếu phát hiện fake</span>
               </div>
               <div className="flex items-center gap-2">
-                <CheckCircle className="w-4 h-4 text-emerald-600" />
+                <CheckCircle className="w-4 h-4 text-emerald-600 shrink-0" />
                 <span>Bảo hành keo chỉ 12 tháng</span>
               </div>
               <div className="flex items-center gap-2">
-                <CheckCircle className="w-4 h-4 text-emerald-600" />
+                <CheckCircle className="w-4 h-4 text-emerald-600 shrink-0" />
                 <span>Hỗ trợ đổi size trong 30 ngày</span>
               </div>
               <div className="flex items-center gap-2">
-                <CheckCircle className="w-4 h-4 text-emerald-600" />
+                <CheckCircle className="w-4 h-4 text-emerald-600 shrink-0" />
                 <span>Kiểm tra hàng trước khi thanh toán</span>
               </div>
             </div>
@@ -345,7 +395,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
             <img
               src="https://images.unsplash.com/photo-1549298916-b41d501d3772?w=800&auto=format&fit=crop&q=80"
               alt="Authenticity Inspection"
-              className="w-full h-72 sm:h-80 object-cover rounded-2xl shadow-xl"
+              className="w-full h-56 sm:h-80 object-cover rounded-2xl shadow-xl"
               referrerPolicy="no-referrer"
             />
           </div>
@@ -354,31 +404,31 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
 
       {/* 8. LATEST SNEAKER BLOG & TRENDS */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-4 sm:mb-6">
           <div>
-            <h2 className="text-lg sm:text-2xl font-extrabold text-neutral-950 uppercase tracking-tight font-['Space_Grotesk']">
+            <h2 className="text-base sm:text-2xl font-extrabold text-neutral-950 dark:text-white uppercase tracking-tight font-['Space_Grotesk']">
               TIN TỨC & XU HƯỚNG SNEAKER
             </h2>
-            <p className="text-xs text-neutral-500">Cẩm nang chọn giày, cách vệ sinh và tin tức thời trang mới nhất</p>
+            <p className="text-[11px] sm:text-xs text-neutral-500 dark:text-neutral-400">Cẩm nang chọn giày, cách vệ sinh và tin tức thời trang mới nhất</p>
           </div>
           <button
             id="see-all-blogs-btn"
             onClick={() => onNavigate('blog')}
-            className="text-xs font-bold text-neutral-900 hover:underline flex items-center gap-1"
+            className="text-xs font-bold text-neutral-900 dark:text-neutral-200 hover:underline flex items-center gap-1"
           >
-            <span>Xem tất cả bài viết</span>
+            <span>Xem tất cả</span>
             <ChevronRight className="w-4 h-4" />
           </button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
           {blogs.slice(0, 3).map(post => (
             <div
               key={post.id}
               onClick={() => onNavigate('blog-detail', { slug: post.slug })}
-              className="bg-white rounded-3xl border border-neutral-100 overflow-hidden hover:shadow-xl hover:border-neutral-200 transition-all cursor-pointer group flex flex-col"
+              className="bg-white dark:bg-[#1a1a1a] rounded-3xl border border-neutral-100 dark:border-neutral-800 overflow-hidden hover:shadow-xl hover:border-neutral-200 dark:hover:border-neutral-700 transition-all cursor-pointer group flex flex-col"
             >
-              <div className="aspect-video w-full overflow-hidden bg-neutral-100">
+              <div className="aspect-video w-full overflow-hidden bg-neutral-100 dark:bg-neutral-800">
                 <img
                   src={post.image}
                   alt={post.title}
@@ -386,22 +436,22 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
                   referrerPolicy="no-referrer"
                 />
               </div>
-              <div className="p-5 flex-1 flex flex-col justify-between">
+              <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between">
                 <div>
-                  <div className="flex items-center gap-2 text-[11px] font-bold text-neutral-400 uppercase tracking-wider mb-2">
-                    <span className="text-amber-600">{post.category}</span>
+                  <div className="flex items-center gap-2 text-[10px] sm:text-[11px] font-bold text-neutral-400 uppercase tracking-wider mb-1.5 sm:mb-2">
+                    <span className="text-amber-600 dark:text-amber-400">{post.category}</span>
                     <span>•</span>
                     <span>{post.publishedAt}</span>
                   </div>
-                  <h3 className="text-sm sm:text-base font-extrabold text-neutral-950 group-hover:text-neutral-900 line-clamp-2 leading-snug">
+                  <h3 className="text-xs sm:text-base font-extrabold text-neutral-950 dark:text-white group-hover:text-rose-600 dark:group-hover:text-rose-400 line-clamp-2 leading-snug transition-colors">
                     {post.title}
                   </h3>
-                  <p className="text-xs text-neutral-500 line-clamp-2 mt-2 leading-relaxed">
+                  <p className="text-[11px] sm:text-xs text-neutral-500 dark:text-neutral-400 line-clamp-2 mt-1.5 sm:mt-2 leading-relaxed">
                     {post.summary}
                   </p>
                 </div>
 
-                <div className="pt-4 mt-4 border-t border-neutral-100 flex items-center justify-between text-xs font-bold text-neutral-900 group-hover:underline">
+                <div className="pt-3 sm:pt-4 mt-3 sm:mt-4 border-t border-neutral-100 dark:border-neutral-800 flex items-center justify-between text-xs font-bold text-neutral-900 dark:text-white group-hover:underline">
                   <span>Đọc tiếp</span>
                   <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                 </div>

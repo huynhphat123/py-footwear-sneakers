@@ -26,20 +26,27 @@ export const AuthModal: React.FC = () => {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [rememberMe, setRememberMe] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   if (!isAuthModalOpen) return null;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (authModalMode === 'login') {
-      login(email, password);
-    } else {
-      register(name, email, phone, password);
+    setIsSubmitting(true);
+    try {
+      if (authModalMode === 'login') {
+        await login(email, password);
+      } else {
+        await register(name, email, phone, password);
+      }
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
-  const handleQuickLogin = (demoEmail: string) => {
-    login(demoEmail, 'password');
+  const fillDemoAccount = (demoEmail: string) => {
+    setEmail(demoEmail);
+    setPassword('password');
   };
 
   return (
@@ -172,15 +179,47 @@ export const AuthModal: React.FC = () => {
           <button
             type="submit"
             id="auth-submit-btn"
-            className="w-full py-3 bg-neutral-950 dark:bg-white text-white dark:text-neutral-950 rounded-xl font-bold text-xs hover:bg-neutral-800 dark:hover:bg-neutral-100 transition-all flex items-center justify-center gap-2 shadow-lg mt-2"
+            disabled={isSubmitting}
+            className="w-full py-3 bg-neutral-950 dark:bg-white text-white dark:text-neutral-950 rounded-xl font-bold text-xs hover:bg-neutral-800 dark:hover:bg-neutral-100 disabled:opacity-50 transition-all flex items-center justify-center gap-2 shadow-lg mt-2"
           >
-            <span>{authModalMode === 'login' ? 'Đăng Nhập' : 'Tạo Tài Khoản'}</span>
+            <span>
+              {isSubmitting
+                ? 'Đang xử lý...'
+                : authModalMode === 'login'
+                ? 'Đăng Nhập'
+                : 'Tạo Tài Khoản'}
+            </span>
             <ArrowRight className="w-4 h-4" />
           </button>
         </form>
 
+        {/* Quick Demo Fill (for testing) */}
+        {authModalMode === 'login' && (
+          <div className="mt-4 p-3 bg-neutral-50 dark:bg-neutral-900/60 rounded-2xl border border-neutral-100 dark:border-neutral-800 text-center">
+            <div className="text-[11px] text-neutral-500 dark:text-neutral-400 mb-2 font-medium">
+              Tài khoản mẫu để kiểm thử nhanh:
+            </div>
+            <div className="flex justify-center gap-2">
+              <button
+                type="button"
+                onClick={() => fillDemoAccount('admin@pyfootwear.vn')}
+                className="px-2.5 py-1 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg text-[11px] font-bold text-neutral-800 dark:text-neutral-200 hover:border-neutral-950 dark:hover:border-white transition-all"
+              >
+                Admin demo
+              </button>
+              <button
+                type="button"
+                onClick={() => fillDemoAccount('khachhang@pyfootwear.vn')}
+                className="px-2.5 py-1 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-lg text-[11px] font-bold text-neutral-800 dark:text-neutral-200 hover:border-neutral-950 dark:hover:border-white transition-all"
+              >
+                Khách hàng demo
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* Toggle Mode */}
-        <div className="mt-6 text-center text-xs text-neutral-600 dark:text-neutral-400">
+        <div className="mt-5 text-center text-xs text-neutral-600 dark:text-neutral-400">
           {authModalMode === 'login' ? (
             <span>
               Chưa có tài khoản?{' '}

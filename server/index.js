@@ -199,22 +199,9 @@ app.post('/api/auth/login', async (req, res) => {
     const [rows] = await pool.query('SELECT * FROM users WHERE email = ?', [cleanEmail]);
     
     if (rows.length === 0) {
-      // Auto-create customer user for demo convenience if not exists
-      const userId = `usr-${Date.now()}`;
-      const role = cleanEmail.includes('admin') ? 'admin' : 'customer';
-      const name = cleanEmail.split('@')[0];
-
-      await pool.query(
-        `INSERT INTO users (id, name, email, role, is_active) VALUES (?, ?, ?, ?, ?)`,
-        [userId, name, cleanEmail, role, true]
-      );
-
-      const token = jwt.sign({ id: userId, email: cleanEmail, role }, JWT_SECRET, { expiresIn: '7d' });
-      return res.json({
-        success: true,
-        message: 'Đăng nhập thành công!',
-        token,
-        user: { id: userId, name, email: cleanEmail, role, isActive: true, createdAt: new Date().toISOString() },
+      return res.status(404).json({
+        success: false,
+        message: 'Tài khoản chưa được đăng ký trong hệ thống. Vui lòng tạo tài khoản mới trước khi đăng nhập!',
       });
     }
 
@@ -225,7 +212,10 @@ app.post('/api/auth/login', async (req, res) => {
     }
 
     // Check password if provided and user has password
-    if (password && userRecord.password) {
+    if (userRecord.password) {
+      if (!password) {
+        return res.status(400).json({ success: false, message: 'Vui lòng nhập mật khẩu.' });
+      }
       const isValid = await bcrypt.compare(password, userRecord.password);
       if (!isValid && password !== '123456' && password !== 'password') {
         return res.status(401).json({ success: false, message: 'Mật khẩu không chính xác.' });

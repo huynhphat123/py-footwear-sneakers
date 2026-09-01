@@ -9,6 +9,7 @@ import { QuickViewModal } from './components/common/QuickViewModal';
 import { SizeGuideModal } from './components/common/SizeGuideModal';
 import { AuthModal } from './components/common/AuthModal';
 import { BackToTop } from './components/common/BackToTop';
+import { BottomNav } from './components/common/BottomNav';
 
 // Pages
 import { HomePage } from './pages/HomePage';
@@ -87,7 +88,7 @@ const MainApp: React.FC = () => {
       />
 
       {/* 2. PAGE VIEW ROUTING */}
-      <main className="flex-1">
+      <main className="flex-1 pb-16 lg:pb-0">
         {currentPage === 'home' && (
           <HomePage onNavigate={handleNavigate} />
         )}
@@ -160,7 +161,10 @@ const MainApp: React.FC = () => {
       {/* 3. STORE FOOTER */}
       <Footer onNavigate={handleNavigate} />
 
-      {/* 4. GLOBAL INTERACTIVE MODALS & DRAWERS */}
+      {/* 4. MOBILE BOTTOM NAVIGATION */}
+      <BottomNav currentPage={currentPage} onNavigate={handleNavigate} />
+
+      {/* 5. GLOBAL INTERACTIVE MODALS & DRAWERS */}
       <CartDrawer onNavigate={handleNavigate} />
       <SearchModal onNavigate={handleNavigate} />
       <QuickViewModal onNavigate={handleNavigate} />
