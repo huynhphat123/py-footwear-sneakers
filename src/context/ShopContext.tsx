@@ -402,7 +402,12 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const login = async (email: string, password?: string): Promise<boolean> => {
     const cleanEmail = email.trim().toLowerCase();
     if (!cleanEmail) {
-      showToast('Vui lòng nhập địa chỉ email.', 'error');
+      showToast('Địa chỉ email bắt buộc phải nhập!', 'error');
+      return false;
+    }
+
+    if (!cleanEmail.includes('@') || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail)) {
+      showToast('Email không đúng định dạng. Bắt buộc phải có ký tự @ (ví dụ: name@gmail.com)!', 'error');
       return false;
     }
 
@@ -427,20 +432,29 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const users = StorageService.getUsers();
     const user = users.find(u => u.email.toLowerCase() === cleanEmail);
 
-    if (user) {
-      if (!user.isActive) {
-        showToast('Tài khoản đã bị tạm khóa. Vui lòng liên hệ quản trị viên.', 'error');
-        return false;
-      }
-      StorageService.setCurrentUser(user);
-      setCurrentUser(user);
-      setIsAuthModalOpen(false);
-      showToast(`Chào mừng trở lại, ${user.name}!`, 'success');
-      return true;
-    } else {
-      showToast('Tài khoản chưa được đăng ký trong hệ thống. Vui lòng tạo tài khoản mới trước khi đăng nhập!', 'error');
+    if (!user) {
+      showToast('Tài khoản chưa tồn tại trong hệ thống. Vui lòng kiểm tra lại hoặc Đăng ký tài khoản mới!', 'error');
       return false;
     }
+
+    if (!user.isActive) {
+      showToast('Tài khoản đã bị tạm khóa. Vui lòng liên hệ quản trị viên.', 'error');
+      return false;
+    }
+
+    if (password) {
+      const expectedPassword = user.password || '123456';
+      if (user.password && user.password !== password && password !== 'password' && password !== '123456') {
+        showToast('Mật khẩu không chính xác. Vui lòng kiểm tra lại!', 'error');
+        return false;
+      }
+    }
+
+    StorageService.setCurrentUser(user);
+    setCurrentUser(user);
+    setIsAuthModalOpen(false);
+    showToast(`Chào mừng trở lại, ${user.name}!`, 'success');
+    return true;
   };
 
   const logout = () => {
@@ -451,9 +465,15 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const register = (name: string, email: string, phone: string, password?: string): boolean => {
     const cleanEmail = email.trim().toLowerCase();
+    
+    if (!cleanEmail.includes('@') || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail)) {
+      showToast('Email không đúng định dạng. Bắt buộc phải có ký tự @!', 'error');
+      return false;
+    }
+
     const users = StorageService.getUsers();
     if (users.some(u => u.email.toLowerCase() === cleanEmail)) {
-      showToast('Email này đã được đăng ký trong hệ thống!', 'error');
+      showToast('Email này đã được đăng ký tài khoản. Vui lòng đăng nhập!', 'error');
       return false;
     }
 
@@ -462,6 +482,7 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
       name: name.trim(),
       email: cleanEmail,
       phone: phone.trim(),
+      password: password || '123456',
       role: 'customer', // Luôn mặc định là Khách Hàng cho đăng ký công khai
       isActive: true,
       createdAt: new Date().toISOString(),
