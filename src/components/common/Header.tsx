@@ -124,8 +124,12 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, onOpenAdmin, current
           <div className="flex items-center lg:hidden">
             <button
               id="mobile-hamburger-btn"
-              onClick={() => setMobileMenuOpen(true)}
-              className="p-2 -ml-2 rounded-lg text-neutral-700 dark:text-neutral-200 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                setMobileMenuOpen(true);
+              }}
+              className="p-2 -ml-2 rounded-xl text-neutral-800 dark:text-neutral-100 hover:text-neutral-950 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800 active:scale-95 transition-all touch-manipulation cursor-pointer"
               aria-label="Open Menu"
             >
               <Menu className="w-6 h-6" />
@@ -546,7 +550,7 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, onOpenAdmin, current
 
       {/* 3. MOBILE SLIDE-OUT MENU DRAWER */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 z-50 lg:hidden flex">
+        <div className="fixed inset-0 z-[100] lg:hidden flex">
           <div
             className="fixed inset-0 bg-neutral-950/70 backdrop-blur-sm transition-opacity duration-300 animate-in fade-in"
             onClick={() => setMobileMenuOpen(false)}
