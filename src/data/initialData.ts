@@ -1,0 +1,838 @@
+import { Product, Brand, Category, Coupon, GiftCard, Review, BlogPost, StoreLocation, StoreSettings, User, Order } from '../types';
+
+export const INITIAL_SETTINGS: StoreSettings = {
+  storeName: 'PY Footwear & Sneakers',
+  storeWorkingHours: '09:00 - 17:30',
+  storeEmail: 'phatht@tcr.vn',
+  storeAddress: '69 Trương Văn Bang, Phường Bình Hưng, Thủ Đức',
+  freeShippingThreshold: 3000000,
+  standardShippingFee: 30000,
+  expressShippingFee: 50000,
+  vnpayTmnCode: 'PYSANDBOX',
+  vnpayHashSecret: 'RAQDKATCSMCVUDJEHGXUXUAGNEZUHXDE',
+};
+
+export const INITIAL_USERS: User[] = [
+  {
+    id: 'usr-admin-1',
+    name: 'PY Administrator',
+    email: 'admin@pyfootwear.vn',
+    phone: '0908123456',
+    role: 'admin',
+    isActive: true,
+    createdAt: '2025-01-01T08:00:00Z',
+  },
+];
+
+export const INITIAL_BRANDS: Brand[] = [
+  {
+    id: 'b-nike',
+    name: 'Nike',
+    slug: 'nike',
+    logo: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=120&auto=format&fit=crop&q=80',
+    banner: 'https://images.unsplash.com/photo-1552346154-21d32810aba3?w=1200&auto=format&fit=crop&q=80',
+    description: 'Thương hiệu đồ thể thao và sneaker hàng đầu thế giới với công nghệ Air, React và Zoom vượt trội.',
+    status: 'active',
+    seoTitle: 'Giày Nike Chính Hãng | PY',
+    seoDescription: 'Bộ sưu tập giày Nike Air Force 1, Dunk Low, Air Max chính hãng 100% tại PY.',
+    productCount: 12,
+  },
+  {
+    id: 'b-adidas',
+    name: 'Adidas',
+    slug: 'adidas',
+    logo: 'https://images.unsplash.com/photo-1518002171953-a080ee817e1f?w=120&auto=format&fit=crop&q=80',
+    banner: 'https://images.unsplash.com/photo-1518002171953-a080ee817e1f?w=1200&auto=format&fit=crop&q=80',
+    description: 'Biểu tượng 3 sọc nổi tiếng với các dòng Samba, Superstar, Stan Smith và công nghệ đế Boost huyền thoại.',
+    status: 'active',
+    seoTitle: 'Giày Adidas Chính Hãng | PY',
+    seoDescription: 'Mua giày Adidas Samba, Gazelle, Ultraboost phân phối chính hãng cam kết giá tốt nhất.',
+    productCount: 8,
+  },
+  {
+    id: 'b-jordan',
+    name: 'Jordan',
+    slug: 'jordan',
+    logo: 'https://images.unsplash.com/photo-1579338559194-a162d19bf842?w=120&auto=format&fit=crop&q=80',
+    banner: 'https://images.unsplash.com/photo-1579338559194-a162d19bf842?w=1200&auto=format&fit=crop&q=80',
+    description: 'Dòng giày bóng rổ di sản của huyền thoại Michael Jordan - biểu tượng của văn hoá streetwear toàn cầu.',
+    status: 'active',
+    seoTitle: 'Giày Air Jordan 1 Chính Hãng | PY',
+    seoDescription: 'Air Jordan 1 High, Mid, Low đa dạng phối màu độc quyền bảo hành chính hãng.',
+    productCount: 6,
+  },
+  {
+    id: 'b-newbalance',
+    name: 'New Balance',
+    slug: 'new-balance',
+    logo: 'https://images.unsplash.com/photo-1539185441755-769473a23570?w=120&auto=format&fit=crop&q=80',
+    banner: 'https://images.unsplash.com/photo-1539185441755-769473a23570?w=1200&auto=format&fit=crop&q=80',
+    description: 'Chất lượng gia công đỉnh cao cùng thiết kế dad-shoe thời thượng: 550, 2002R, 1906R, 990v6.',
+    status: 'active',
+    seoTitle: 'Giày New Balance Chính Hãng | PY',
+    seoDescription: 'Sở hữu New Balance 530, 550, 2002R êm ái phong cách retro hiện đại.',
+    productCount: 5,
+  },
+  {
+    id: 'b-puma',
+    name: 'Puma',
+    slug: 'puma',
+    logo: 'https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=120&auto=format&fit=crop&q=80',
+    banner: 'https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=1200&auto=format&fit=crop&q=80',
+    description: 'Sự kết hợp hoàn hảo giữa phong cách tốc độ và thời trang đường phố như dòng Palermo, Suede.',
+    status: 'active',
+    seoTitle: 'Giày Puma Chính Hãng | PY',
+    seoDescription: 'Giày Puma chính hãng giá tốt, phong cách năng động thể thao.',
+    productCount: 4,
+  },
+  {
+    id: 'b-asics',
+    name: 'Asics',
+    slug: 'asics',
+    logo: 'https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?w=120&auto=format&fit=crop&q=80',
+    banner: 'https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?w=1200&auto=format&fit=crop&q=80',
+    description: 'Công nghệ Gel giảm chấn Nhật Bản trứ danh trên dòng Gel-Kayano 14, Gel-NYC, GT-2160.',
+    status: 'active',
+    seoTitle: 'Giày Asics Gel Chính Hãng | PY',
+    seoDescription: 'Sneaker chạy bộ và thời trang Asics êm chân bậc nhất.',
+    productCount: 3,
+  },
+  {
+    id: 'b-converse',
+    name: 'Converse',
+    slug: 'converse',
+    logo: 'https://images.unsplash.com/photo-1607522370275-f14206abe5d3?w=120&auto=format&fit=crop&q=80',
+    description: 'Biểu tượng Chuck Taylor All Star và Chuck 70 trường tồn qua năm tháng.',
+    status: 'active',
+    seoTitle: 'Giày Converse Chuck 70 | PY',
+    seoDescription: 'Giày Converse cổ cao và cổ thấp vải canvas cao cấp.',
+    productCount: 3,
+  },
+  {
+    id: 'b-vans',
+    name: 'Vans',
+    slug: 'vans',
+    logo: 'https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?w=120&auto=format&fit=crop&q=80',
+    description: 'Văn hóa ván trượt California với Old Skool, Sk8-Hi và Slip-On kinh điển.',
+    status: 'active',
+    seoTitle: 'Giày Vans Old Skool Chính Hãng | PY',
+    seoDescription: 'Vans Off The Wall chính hãng tại Việt Nam.',
+    productCount: 3,
+  }
+];
+
+export const INITIAL_CATEGORIES: Category[] = [
+  {
+    id: 'c-sneaker',
+    name: 'Sneaker & Lifestyle',
+    slug: 'sneaker',
+    parentId: null,
+    image: 'https://images.unsplash.com/photo-1552346154-21d32810aba3?w=600&auto=format&fit=crop&q=80',
+    description: 'Các mẫu sneaker đường phố thời thượng cho hoạt động hàng ngày.',
+    status: 'active',
+    seoTitle: 'Sneaker Đường Phố Thời Trang | PY',
+    seoDescription: 'Tổng hợp mẫu giày sneaker lifestyle nam nữ bán chạy nhất.',
+  },
+  {
+    id: 'c-running',
+    name: 'Giày Chạy Bộ (Running)',
+    slug: 'running',
+    parentId: null,
+    image: 'https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?w=600&auto=format&fit=crop&q=80',
+    description: 'Đế đệm đàn hồi êm ái tối ưu hóa hiệu suất chạy cự ly ngắn & marathon.',
+    status: 'active',
+    seoTitle: 'Giày Chạy Bộ Nam Nữ Siêu Nhẹ | PY',
+    seoDescription: 'Giày running chính hãng êm ái, trợ lực và thoáng khí.',
+  },
+  {
+    id: 'c-basketball',
+    name: 'Giày Bóng Rổ (Basketball)',
+    slug: 'basketball',
+    parentId: null,
+    image: 'https://images.unsplash.com/photo-1579338559194-a162d19bf842?w=600&auto=format&fit=crop&q=80',
+    description: 'Hỗ trợ bảo vệ cổ chân, độ bám sân vượt trội cho các trận đấu chuyên nghiệp.',
+    status: 'active',
+    seoTitle: 'Giày Bóng Rổ Chuyên Nghiệp | PY',
+    seoDescription: 'Giày bóng rổ Nike LeBron, Jordan, KD chính hãng.',
+  },
+  {
+    id: 'c-training',
+    name: 'Gym & Training',
+    slug: 'training',
+    parentId: null,
+    image: 'https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=600&auto=format&fit=crop&q=80',
+    description: 'Đế phẳng ổn định cho tập gym, nâng tạ và cardio cường độ cao.',
+    status: 'active',
+  },
+  {
+    id: 'c-sandal',
+    name: 'Sandal & Dép Slides',
+    slug: 'sandal-slides',
+    parentId: null,
+    image: 'https://images.unsplash.com/photo-1603808033192-082d6919d3e1?w=600&auto=format&fit=crop&q=80',
+    description: 'Thoải mái dạo phố, đi biển và thư giãn sau tập luyện.',
+    status: 'active',
+  },
+  {
+    id: 'c-boots',
+    name: 'Boots & Outdoor',
+    slug: 'boots',
+    parentId: null,
+    image: 'https://images.unsplash.com/photo-1549298916-b41d501d3772?w=600&auto=format&fit=crop&q=80',
+    description: 'Phong cách cá tính, bền bỉ chống chịu mọi địa hình thời tiết.',
+    status: 'active',
+  },
+  {
+    id: 'c-accessories',
+    name: 'Phụ Kiện Giày',
+    slug: 'accessories',
+    parentId: null,
+    image: 'https://images.unsplash.com/photo-1582588678413-dbf45f4823e9?w=600&auto=format&fit=crop&q=80',
+    description: 'Tất dệt cao cấp, bộ vệ sinh giày sneaker, dây giày thời trang, túi xách.',
+    status: 'active',
+  },
+  {
+    id: 'c-heritage',
+    name: 'Classic & Heritage',
+    slug: 'heritage',
+    parentId: null,
+    image: 'https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?w=600&auto=format&fit=crop&q=80',
+    description: 'Những kiểu dáng kinh điển gắn liền với lịch sử thời trang thế giới.',
+    status: 'active',
+  }
+];
+
+// Helper to generate variants
+const generateVariants = (productId: string, sizes: string[], colors: { name: string; hex: string }[], basePrice: number, baseSale?: number) => {
+  const variants = [];
+  for (const color of colors) {
+    for (const size of sizes) {
+      // simulate realistic inventory: some have 8, some 2, some 0
+      const randSeed = (productId.charCodeAt(productId.length - 1) + parseInt(size) + color.name.length) % 10;
+      const stock = randSeed === 0 ? 0 : randSeed < 3 ? 2 : randSeed + 4;
+      const sold = (randSeed * 3) + 2;
+      const reserved = stock > 0 && randSeed % 2 === 0 ? 1 : 0;
+      
+      variants.push({
+        id: `var-${productId}-${size}-${color.name.toLowerCase().replace(/\s+/g, '')}`,
+        productId,
+        size,
+        color: color.name,
+        colorHex: color.hex,
+        sku: `${productId.toUpperCase()}-${color.name.substring(0, 2).toUpperCase()}-${size}`,
+        price: basePrice,
+        salePrice: baseSale,
+        stockQuantity: stock,
+        reservedQuantity: reserved,
+        soldQuantity: sold,
+      });
+    }
+  }
+  return variants;
+};
+
+export const INITIAL_PRODUCTS: Product[] = [
+  {
+    id: 'p-1',
+    name: 'Nike Air Force 1 07 Triple White',
+    slug: 'nike-air-force-1-07-triple-white',
+    sku: 'NK-AF1-07-WHT',
+    brandId: 'b-nike',
+    brandName: 'Nike',
+    categoryId: 'c-sneaker',
+    categoryName: 'Sneaker & Lifestyle',
+    gender: 'Unisex',
+    description: 'Huyền thoại bất tử của dòng giày sneaker thể thao. Giày Nike Air Force 1 07 giữ trọn phong cách cổ điển với chất liệu da bóng mịn màng, công nghệ đệm khí Nike Air êm ái suốt ngày dài và độ bền bỉ đáng kinh ngạc. Điểm nhấn đường may sắc sảo và đế ngoài cao su độ bám hoàn hảo.',
+    shortDescription: 'Mẫu sneaker da trắng kinh điển dễ phối đồ nhất mọi thời đại với đệm khí Air êm ái.',
+    originalPrice: 3200000,
+    salePrice: 2890000,
+    costPrice: 2100000,
+    status: 'active',
+    isFeatured: true,
+    isNew: false,
+    isBestSeller: true,
+    isSale: true,
+    mainImage: 'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=800&auto=format&fit=crop&q=80',
+    galleryImages: [
+      'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=800&auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1549298916-b41d501d3772?w=800&auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=800&auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?w=800&auto=format&fit=crop&q=80'
+    ],
+    variants: generateVariants('p-1', ['38', '39', '40', '41', '42', '43', '44'], [{ name: 'Triple White', hex: '#FFFFFF' }, { name: 'Triple Black', hex: '#111111' }], 3200000, 2890000),
+    rating: 4.9,
+    reviewCount: 148,
+    seoTitle: 'Nike Air Force 1 07 All White Chính Hãng | PY',
+    seoDescription: 'Mua giày Nike Air Force 1 07 All White chính hãng cam kết đền 200% nếu phát hiện fake.',
+    createdAt: '2025-01-10T10:00:00Z',
+  },
+  {
+    id: 'p-2',
+    name: 'Air Jordan 1 Retro High OG Chicago Lost & Found',
+    slug: 'air-jordan-1-retro-high-og-chicago-lost-and-found',
+    sku: 'JD-AJ1-CHI-OG',
+    brandId: 'b-jordan',
+    brandName: 'Jordan',
+    categoryId: 'c-basketball',
+    categoryName: 'Giày Bóng Rổ (Basketball)',
+    gender: 'Unisex',
+    description: 'Phiên bản hoài niệm vĩ đại nhất của thương hiệu Jordan. Tái hiện màu áo của Chicago Bulls 1985 với lớp da nứt cổ điển, hộp giày vintage kèm hóa đơn thập niên 80. Đây là món đồ sưu tầm mà mọi sneakerhead đều khao khát.',
+    shortDescription: 'Siêu phẩm retro bóng rổ di sản thập niên 80 với phối màu Chicago lịch sử.',
+    originalPrice: 6500000,
+    salePrice: 5990000,
+    costPrice: 4200000,
+    status: 'active',
+    isFeatured: true,
+    isNew: true,
+    isBestSeller: true,
+    isSale: true,
+    mainImage: 'https://images.unsplash.com/photo-1552346154-21d32810aba3?w=800&auto=format&fit=crop&q=80',
+    galleryImages: [
+      'https://images.unsplash.com/photo-1552346154-21d32810aba3?w=800&auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1579338559194-a162d19bf842?w=800&auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1512374382149-233c42b6a83b?w=800&auto=format&fit=crop&q=80'
+    ],
+    variants: generateVariants('p-2', ['40', '41', '42', '42.5', '43', '44'], [{ name: 'Varsity Red/Black', hex: '#B91C1C' }], 6500000, 5990000),
+    rating: 5.0,
+    reviewCount: 92,
+    seoTitle: 'Air Jordan 1 High Chicago Lost & Found | PY',
+    seoDescription: 'Air Jordan 1 High OG Chicago nguyên seal chính hãng, ship hỏa tốc toàn quốc.',
+    createdAt: '2025-01-12T14:20:00Z',
+  },
+  {
+    id: 'p-3',
+    name: 'Adidas Samba OG Cloud White Core Black',
+    slug: 'adidas-samba-og-cloud-white-core-black',
+    sku: 'AD-SAM-OG-WHT',
+    brandId: 'b-adidas',
+    brandName: 'Adidas',
+    categoryId: 'c-sneaker',
+    categoryName: 'Sneaker & Lifestyle',
+    gender: 'Unisex',
+    description: 'Cơn sốt thời trang đường phố đương đại! Ra đời từ sân cỏ bóng đá trong nhà, Adidas Samba OG nay trở thành biểu tượng phong cách Blokecore với mũi da lộn chữ T sang trọng, 3 sọc da tương phản và đế cao su gum dẻo dai bám đường.',
+    shortDescription: 'Cơn sốt Blokecore toàn cầu với mũi da lộn chữ T và đế gum cổ điển.',
+    originalPrice: 2900000,
+    salePrice: 2650000,
+    costPrice: 1800000,
+    status: 'active',
+    isFeatured: true,
+    isNew: false,
+    isBestSeller: true,
+    isSale: true,
+    mainImage: 'https://images.unsplash.com/photo-1518002171953-a080ee817e1f?w=800&auto=format&fit=crop&q=80',
+    galleryImages: [
+      'https://images.unsplash.com/photo-1518002171953-a080ee817e1f?w=800&auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?w=800&auto=format&fit=crop&q=80'
+    ],
+    variants: generateVariants('p-3', ['37', '38', '39', '40', '41', '42', '43'], [{ name: 'White / Black Gum', hex: '#F3F4F6' }, { name: 'Core Black / White', hex: '#1F2937' }], 2900000, 2650000),
+    rating: 4.8,
+    reviewCount: 210,
+    seoTitle: 'Adidas Samba OG Cloud White Chính Hãng | PY',
+    seoDescription: 'Đặt mua Adidas Samba OG trắng đen chính hãng giá ưu đãi nhất tại PY.',
+    createdAt: '2025-01-05T09:00:00Z',
+  },
+  {
+    id: 'p-4',
+    name: 'New Balance 550 White Grey Vintage',
+    slug: 'new-balance-550-white-grey-vintage',
+    sku: 'NB-550-WHT-GRY',
+    brandId: 'b-newbalance',
+    brandName: 'New Balance',
+    categoryId: 'c-sneaker',
+    categoryName: 'Sneaker & Lifestyle',
+    gender: 'Unisex',
+    description: 'Sự trở lại ngoạn mục của dòng giày bóng rổ 1989. Thiết kế low-top gọn gàng, thân giày bằng da cao cấp phối lưới thoáng khí và logo chữ N đặc trưng mang đậm hơi thở thời trang retro vintage.',
+    shortDescription: 'Sneaker retro basketball 1989 phối màu trắng xám nhã nhặn, thanh lịch.',
+    originalPrice: 3500000,
+    salePrice: 3150000,
+    costPrice: 2300000,
+    status: 'active',
+    isFeatured: true,
+    isNew: false,
+    isBestSeller: true,
+    isSale: true,
+    mainImage: 'https://images.unsplash.com/photo-1539185441755-769473a23570?w=800&auto=format&fit=crop&q=80',
+    galleryImages: [
+      'https://images.unsplash.com/photo-1539185441755-769473a23570?w=800&auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=800&auto=format&fit=crop&q=80'
+    ],
+    variants: generateVariants('p-4', ['38', '39', '40', '41', '42', '43', '44'], [{ name: 'White / Grey', hex: '#E5E7EB' }, { name: 'White / Green', hex: '#047857' }], 3500000, 3150000),
+    rating: 4.9,
+    reviewCount: 84,
+    seoTitle: 'New Balance 550 White Grey | PY',
+    seoDescription: 'Giày New Balance 550 chính hãng giá tốt, full box chuẩn auth.',
+    createdAt: '2025-01-15T11:30:00Z',
+  },
+  {
+    id: 'p-5',
+    name: 'Nike Dunk Low Retro Panda Black White',
+    slug: 'nike-dunk-low-retro-panda-black-white',
+    sku: 'NK-DUNK-PANDA',
+    brandId: 'b-nike',
+    brandName: 'Nike',
+    categoryId: 'c-sneaker',
+    categoryName: 'Sneaker & Lifestyle',
+    gender: 'Unisex',
+    description: 'Mẫu giày làm mưa làm gió khắp các con phố thời trang. Phối màu Panda đen trắng tối giản nhưng cực kỳ nổi bật, dễ dàng kết hợp với quần ống rộng, jogger hoặc short thể thao.',
+    shortDescription: 'Cơn sốt Panda đen trắng bất bại, dễ phối mọi trang phục hàng ngày.',
+    originalPrice: 3800000,
+    salePrice: 3290000,
+    costPrice: 2400000,
+    status: 'active',
+    isFeatured: true,
+    isNew: false,
+    isBestSeller: true,
+    isSale: true,
+    mainImage: 'https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=800&auto=format&fit=crop&q=80',
+    galleryImages: [
+      'https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=800&auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=800&auto=format&fit=crop&q=80'
+    ],
+    variants: generateVariants('p-5', ['36', '37', '38', '39', '40', '41', '42', '43', '44'], [{ name: 'Panda Black White', hex: '#111827' }], 3800000, 3290000),
+    rating: 4.7,
+    reviewCount: 340,
+    seoTitle: 'Nike Dunk Low Panda Chính Hãng | PY',
+    seoDescription: 'Mua Nike Dunk Low Panda Black White giá tốt nhất, bảo hành chính hãng trọn đời.',
+    createdAt: '2025-01-08T08:15:00Z',
+  },
+  {
+    id: 'p-6',
+    name: 'Asics GEL-Kayano 14 Metallic Silver',
+    slug: 'asics-gel-kayano-14-metallic-silver',
+    sku: 'AS-GEL-KY14-SLV',
+    brandId: 'b-asics',
+    brandName: 'Asics',
+    categoryId: 'c-running',
+    categoryName: 'Giày Chạy Bộ (Running)',
+    gender: 'Unisex',
+    description: 'Đỉnh cao của phong cách Y2K Runner thẩm mỹ kim loại. Công nghệ đệm GEL phân tán lực va đập độc quyền từ viện nghiên cứu khoa học thể thao Asics Nhật Bản, tạo cảm giác êm như bước trên mây.',
+    shortDescription: 'Xu hướng thời trang kim loại Y2K cùng công nghệ đệm Gel êm ái trứ danh.',
+    originalPrice: 4200000,
+    salePrice: 3890000,
+    costPrice: 2800000,
+    status: 'active',
+    isFeatured: true,
+    isNew: true,
+    isBestSeller: false,
+    isSale: true,
+    mainImage: 'https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?w=800&auto=format&fit=crop&q=80',
+    galleryImages: [
+      'https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?w=800&auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&auto=format&fit=crop&q=80'
+    ],
+    variants: generateVariants('p-6', ['39', '40', '41', '42', '43', '44'], [{ name: 'Silver / Cream', hex: '#D1D5DB' }, { name: 'Silver / Black', hex: '#374151' }], 4200000, 3890000),
+    rating: 4.9,
+    reviewCount: 67,
+    seoTitle: 'Asics GEL-Kayano 14 Silver | PY',
+    seoDescription: 'Giày Asics Gel-Kayano 14 phong cách Y2K êm ái bảo vệ khớp gối.',
+    createdAt: '2025-02-01T15:00:00Z',
+  },
+  {
+    id: 'p-7',
+    name: 'Adidas Ultraboost Light Core Black',
+    slug: 'adidas-ultraboost-light-core-black',
+    sku: 'AD-UB-LGHT-BLK',
+    brandId: 'b-adidas',
+    brandName: 'Adidas',
+    categoryId: 'c-running',
+    categoryName: 'Giày Chạy Bộ (Running)',
+    gender: 'Men',
+    description: 'Thế hệ đệm Boost nhẹ nhất lịch sử Adidas với trọng lượng giảm 30%. Hoàn trả năng lượng vượt bậc cho từng sải bước chạy bền, thân vải dệt Primeknit+ ôm khít bàn chân vừa vặn linh hoạt.',
+    shortDescription: 'Công nghệ đế Boost nhẹ hơn 30%, hoàn trả năng lượng tối đa khi chạy.',
+    originalPrice: 4800000,
+    salePrice: 3990000,
+    costPrice: 3100000,
+    status: 'active',
+    isFeatured: true,
+    isNew: false,
+    isBestSeller: true,
+    isSale: true,
+    mainImage: 'https://images.unsplash.com/photo-1518002171953-a080ee817e1f?w=800&auto=format&fit=crop&q=80',
+    galleryImages: [
+      'https://images.unsplash.com/photo-1518002171953-a080ee817e1f?w=800&auto=format&fit=crop&q=80'
+    ],
+    variants: generateVariants('p-7', ['40', '41', '42', '43', '44', '45'], [{ name: 'Core Black', hex: '#111827' }, { name: 'Core White', hex: '#F9FAFB' }], 4800000, 3990000),
+    rating: 4.8,
+    reviewCount: 112,
+    seoTitle: 'Adidas Ultraboost Light Running | PY',
+    seoDescription: 'Giày chạy bộ Adidas Ultraboost Light giảm sốc êm chân số 1.',
+    createdAt: '2025-01-20T10:00:00Z',
+  },
+  {
+    id: 'p-8',
+    name: 'Puma Palermo Leather Special Pink Delight',
+    slug: 'puma-palermo-leather-special-pink-delight',
+    sku: 'PM-PAL-SP-PNK',
+    brandId: 'b-puma',
+    brandName: 'Puma',
+    categoryId: 'c-sneaker',
+    categoryName: 'Sneaker & Lifestyle',
+    gender: 'Women',
+    description: 'Lấy cảm hứng từ không khí các trận cầu bóng đá thập niên 80 tại Sicily (Ý). Giày nổi bật với tag chữ vàng Palermo, chất liệu da lộn mịn cao cấp cùng đế gum nâu sành điệu.',
+    shortDescription: 'Cảm hứng bóng đá Ý thập niên 80 phối màu thời thượng cho phái đẹp.',
+    originalPrice: 2600000,
+    salePrice: 2290000,
+    costPrice: 1500000,
+    status: 'active',
+    isFeatured: false,
+    isNew: true,
+    isBestSeller: false,
+    isSale: true,
+    mainImage: 'https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=800&auto=format&fit=crop&q=80',
+    galleryImages: [
+      'https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=800&auto=format&fit=crop&q=80'
+    ],
+    variants: generateVariants('p-8', ['36', '37', '38', '39', '40'], [{ name: 'Pink Delight / Green', hex: '#F472B6' }], 2600000, 2290000),
+    rating: 4.9,
+    reviewCount: 45,
+    seoTitle: 'Puma Palermo Leather Pink | PY',
+    seoDescription: 'Giày Puma Palermo chính hãng trẻ trung, giao nhanh trong 2h.',
+    createdAt: '2025-02-14T09:00:00Z',
+  },
+  {
+    id: 'p-9',
+    name: 'Converse Chuck 70 Vintage Canvas High Top Black',
+    slug: 'converse-chuck-70-vintage-canvas-high-top-black',
+    sku: 'CV-CHUCK70-HI-BLK',
+    brandId: 'b-converse',
+    brandName: 'Converse',
+    categoryId: 'c-heritage',
+    categoryName: 'Classic & Heritage',
+    gender: 'Unisex',
+    description: 'Nâng cấp từ dòng Chuck cổ điển với vải canvas dày dặn 12oz, đế cao su trắng ngà vintage phủ bóng bảo vệ tốt hơn và lót giày OrthoLite đệm êm tối đa suốt cả ngày dài.',
+    shortDescription: 'Bản nâng cấp cao cấp với vải canvas 12oz và lót đệm OrthoLite siêu êm.',
+    originalPrice: 2100000,
+    salePrice: 1890000,
+    costPrice: 1200000,
+    status: 'active',
+    isFeatured: false,
+    isNew: false,
+    isBestSeller: true,
+    isSale: true,
+    mainImage: 'https://images.unsplash.com/photo-1607522370275-f14206abe5d3?w=800&auto=format&fit=crop&q=80',
+    galleryImages: [
+      'https://images.unsplash.com/photo-1607522370275-f14206abe5d3?w=800&auto=format&fit=crop&q=80'
+    ],
+    variants: generateVariants('p-9', ['37', '38', '39', '40', '41', '42', '43'], [{ name: 'Black Canvas', hex: '#1F2937' }, { name: 'Parchment Cream', hex: '#FEF3C7' }], 2100000, 1890000),
+    rating: 4.8,
+    reviewCount: 198,
+    seoTitle: 'Converse Chuck 70 High Top Black | PY',
+    seoDescription: 'Converse Chuck 70 cổ cao chính hãng, đế bóng bền đẹp.',
+    createdAt: '2025-01-01T08:00:00Z',
+  },
+  {
+    id: 'p-10',
+    name: 'Vans Old Skool Classic Black White',
+    slug: 'vans-old-skool-classic-black-white',
+    sku: 'VN-OLDSKOOL-BLK',
+    brandId: 'b-vans',
+    brandName: 'Vans',
+    categoryId: 'c-heritage',
+    categoryName: 'Classic & Heritage',
+    gender: 'Unisex',
+    description: 'Ra mắt năm 1977 với tên gọi Vans #36, đây là đôi giày đầu tiên sở hữu dải sidestripe lượn sóng biểu tượng. Mũi da lộn bền chắc, thân vải dệt và đế waffle cao su đặc trưng của văn hóa trượt ván.',
+    shortDescription: 'Dải sọc Jazz stripe huyền thoại cùng đế cao su waffle chống trượt.',
+    originalPrice: 1950000,
+    salePrice: 1690000,
+    costPrice: 1100000,
+    status: 'active',
+    isFeatured: false,
+    isNew: false,
+    isBestSeller: true,
+    isSale: true,
+    mainImage: 'https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?w=800&auto=format&fit=crop&q=80',
+    galleryImages: [
+      'https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?w=800&auto=format&fit=crop&q=80'
+    ],
+    variants: generateVariants('p-10', ['38', '39', '40', '41', '42', '43'], [{ name: 'Classic Black White', hex: '#111827' }], 1950000, 1690000),
+    rating: 4.7,
+    reviewCount: 156,
+    seoTitle: 'Vans Old Skool Black White Chính Hãng | PY',
+    seoDescription: 'Giày Vans Old Skool sọc trắng chính hãng cho học sinh sinh viên.',
+    createdAt: '2025-01-03T10:00:00Z',
+  },
+  {
+    id: 'p-11',
+    name: 'Nike ZoomX Vaporfly NEXT% 3 Ekiden',
+    slug: 'nike-zoomx-vaporfly-next-3-ekiden',
+    sku: 'NK-VAPOR3-EKD',
+    brandId: 'b-nike',
+    brandName: 'Nike',
+    categoryId: 'c-running',
+    categoryName: 'Giày Chạy Bộ (Running)',
+    gender: 'Unisex',
+    description: 'Vũ khí phá kỷ lục tốc độ marathon! Tích hợp đĩa đệm sợi carbon toàn chiều dài cùng bọt siêu nhẹ ZoomX mang lại lực đẩy bùng nổ, tiết kiệm tối đa sức lực cho từng kilomet thi đấu.',
+    shortDescription: 'Đế đệm đĩa carbon cùng bọt ZoomX đỉnh cao cho các vận động viên marathon.',
+    originalPrice: 7200000,
+    salePrice: 6690000,
+    costPrice: 5100000,
+    status: 'active',
+    isFeatured: true,
+    isNew: true,
+    isBestSeller: false,
+    isSale: true,
+    mainImage: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&auto=format&fit=crop&q=80',
+    galleryImages: [
+      'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?w=800&auto=format&fit=crop&q=80'
+    ],
+    variants: generateVariants('p-11', ['40', '41', '42', '43', '44'], [{ name: 'Ekiden Bright Crimson', hex: '#EF4444' }], 7200000, 6690000),
+    rating: 5.0,
+    reviewCount: 38,
+    seoTitle: 'Nike Vaporfly NEXT% 3 Chạy Marathon | PY',
+    seoDescription: 'Giày chạy bộ đua marathon Nike Vaporfly 3 đĩa carbon chính hãng.',
+    createdAt: '2025-02-18T11:00:00Z',
+  },
+  {
+    id: 'p-12',
+    name: 'New Balance 1906R Cordura Magnet Grey',
+    slug: 'new-balance-1906r-cordura-magnet-grey',
+    sku: 'NB-1906R-COR-GRY',
+    brandId: 'b-newbalance',
+    brandName: 'New Balance',
+    categoryId: 'c-sneaker',
+    categoryName: 'Sneaker & Lifestyle',
+    gender: 'Men',
+    description: 'Chất liệu vải quân sự Cordura chống nước, chống mài mòn cực tốt. Khung đế N-ergy và hỗ trợ vòm chân Stability Web mang lại độ êm ái và ổn định bậc nhất.',
+    shortDescription: 'Vải dù Cordura siêu bền kháng nước kết hợp đệm N-ergy giảm xóc.',
+    originalPrice: 4600000,
+    salePrice: 4190000,
+    costPrice: 3200000,
+    status: 'active',
+    isFeatured: true,
+    isNew: true,
+    isBestSeller: false,
+    isSale: true,
+    mainImage: 'https://images.unsplash.com/photo-1539185441755-769473a23570?w=800&auto=format&fit=crop&q=80',
+    galleryImages: [
+      'https://images.unsplash.com/photo-1539185441755-769473a23570?w=800&auto=format&fit=crop&q=80'
+    ],
+    variants: generateVariants('p-12', ['40', '41', '42', '43', '44'], [{ name: 'Magnet Grey', hex: '#4B5563' }, { name: 'Olive Green', hex: '#4D7C0F' }], 4600000, 4190000),
+    rating: 4.9,
+    reviewCount: 42,
+    seoTitle: 'New Balance 1906R Cordura Magnet | PY',
+    seoDescription: 'New Balance 1906R chống nước thời trang techwear cá tính.',
+    createdAt: '2025-02-12T16:00:00Z',
+  }
+];
+
+export const INITIAL_COUPONS: Coupon[] = [];
+
+export const INITIAL_GIFTCARDS: GiftCard[] = [];
+
+export const INITIAL_STORES: StoreLocation[] = [
+  {
+    id: 'st-1',
+    name: 'PY Flagship Store Quận 1',
+    address: '188 Hai Bà Trưng, Phường Đa Kao, Quận 1',
+    city: 'Hồ Chí Minh',
+    district: 'Quận 1',
+    phone: '028 3822 8899',
+    openingHours: '09:00 - 22:00 (Cả tuần)',
+    mapUrl: 'https://maps.google.com/?q=188+Hai+Ba+Trung+District+1+HCMC',
+    image: 'https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?w=600&auto=format&fit=crop&q=80',
+    isFlagship: true,
+  },
+  {
+    id: 'st-2',
+    name: 'PY Tràng Tiền Plaza',
+    address: 'Tầng 3, 24 Hai Bà Trưng, Quận Hoàn Kiếm',
+    city: 'Hà Nội',
+    district: 'Hoàn Kiếm',
+    phone: '024 3936 8899',
+    openingHours: '09:30 - 22:00',
+    mapUrl: 'https://maps.google.com/?q=Trang+Tien+Plaza+Hanoi',
+    image: 'https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?w=600&auto=format&fit=crop&q=80',
+    isFlagship: true,
+  },
+  {
+    id: 'st-3',
+    name: 'PY Thảo Điền',
+    address: '88 Xuân Thủy, Phường Thảo Điền, TP. Thủ Đức',
+    city: 'Hồ Chí Minh',
+    district: 'Thủ Đức',
+    phone: '028 3744 8899',
+    openingHours: '09:00 - 21:30',
+    mapUrl: 'https://maps.google.com/?q=88+Xuan+Thuy+Thao+Dien',
+    image: 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=600&auto=format&fit=crop&q=80',
+  },
+  {
+    id: 'st-4',
+    name: 'PY Nguyễn Văn Linh Đà Nẵng',
+    address: '122 Nguyễn Văn Linh, Quận Hải Châu',
+    city: 'Đà Nẵng',
+    district: 'Hải Châu',
+    phone: '0236 388 8899',
+    openingHours: '08:30 - 21:30',
+    mapUrl: 'https://maps.google.com/?q=122+Nguyen+Van+Linh+Da+Nang',
+    image: 'https://images.unsplash.com/photo-1519710164239-da123dc03ef4?w=600&auto=format&fit=crop&q=80',
+  }
+];
+
+export const INITIAL_BLOGS: BlogPost[] = [
+  {
+    id: 'b-1',
+    title: 'Top 7 Đôi Sneaker Không Thể Thiếu Trong Tủ Đồ 2026',
+    slug: 'top-7-doi-sneaker-kinh-dien-2026',
+    category: 'Xu Hướng Thời Trang',
+    author: 'PY Editorial',
+    excerpt: 'Từ vẻ đẹp vượt thời gian của Nike Air Force 1 đến trào lưu Blokecore cùng Adidas Samba, cùng điểm qua những đôi giày đáng đầu tư nhất năm.',
+    content: `Trong thế giới sneaker luôn biến chuyển từng ngày, những mẫu giày di sản (heritage) và xu hướng retro đang chiếm lĩnh vị trí số 1 trên sàn diễn thời trang cũng như đời thường. 
+
+1. **Nike Air Force 1 07 All White**: Định nghĩa của sự thanh lịch và linh hoạt. Không có bất kỳ bộ trang phục nào mà một đôi AF1 trắng tinh tươm không thể phối hợp hoàn hảo.
+2. **Adidas Samba OG**: Từ trào lưu Blokecore đến phong cách Clean Fit, Samba mang đến cảm giác thanh thoát và nét cổ điển đặc trưng của thập niên 70.
+3. **Air Jordan 1 High Chicago Lost & Found**: Tượng đài bất hủ của bóng rổ và văn hóa đường phố toàn cầu.
+4. **New Balance 550**: Sự kết hợp tuyệt vời giữa chất lượng gia công bền bỉ và form dáng vintage dad-shoe cuốn hút.
+5. **Asics GEL-Kayano 14**: Xu hướng kim loại Y2K Runner mang lại độ êm ái chuẩn công nghệ Nhật Bản.
+
+Hãy ghé các cửa hàng PY trên toàn quốc để trải nghiệm và được tư vấn size chuẩn xác nhất!`,
+    featuredImage: 'https://images.unsplash.com/photo-1552346154-21d32810aba3?w=800&auto=format&fit=crop&q=80',
+    status: 'published',
+    publishedAt: '2025-02-15T08:00:00Z',
+    views: 1420,
+  },
+  {
+    id: 'b-2',
+    title: 'Bí Quyết Vệ Sinh & Bảo Quản Giày Sneaker Trắng Luôn Như Mới',
+    slug: 'bi-quyet-ve-sinh-giay-sneaker-trang',
+    category: 'Cẩm Nang Sneaker',
+    author: 'Minh Trí - Care Specialist',
+    excerpt: 'Hướng dẫn chi tiết từng bước làm sạch chất liệu da, vải canvas và khử ố vàng đế cao su cực kỳ an toàn tại nhà.',
+    content: `Giày sneaker trắng luôn là item được yêu thích nhất, nhưng cũng là đối tượng dễ bám bẩn nhất. Dưới đây là quy trình 4 bước chuẩn spa giày tại PY:
+
+- **Bước 1**: Dùng bàn chải lông mềm phủi sạch bụi khô trên bề mặt giày và rãnh đế.
+- **Bước 2**: Sử dung dung dịch vệ sinh chuyên dụng (tránh dùng bột giặt chứa chất tẩy Clo vì sẽ làm ố vàng da và cao su).
+- **Bước 3**: Chà nhẹ nhàng theo vòng tròn từ trên xuống dưới, dùng khăn microfiber sạch thấm khô bọt ngay lập tức.
+- **Bước 4**: Phơi ở nơi thoáng gió, tránh ánh nắng mặt trời trực tiếp. Sử dụng cây giữ form giày (shoe trees) để giữ dáng giày luôn phẳng phiu.`,
+    featuredImage: 'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=800&auto=format&fit=crop&q=80',
+    status: 'published',
+    publishedAt: '2025-02-10T10:00:00Z',
+    views: 980,
+  },
+  {
+    id: 'b-3',
+    title: 'Bảng Hướng Dẫn Chọn Size Giày Chuẩn Nike, Adidas, Jordan',
+    slug: 'bang-huong-dan-chon-size-giay-chuan',
+    category: 'Hướng Dẫn Mua Hàng',
+    author: 'PY Support',
+    excerpt: 'Cách đo chiều dài bàn chân chính xác tại nhà và bảng quy đổi size US, UK, EU, CM của từng thương hiệu lớn.',
+    content: `Mỗi hãng giày đều có form dáng (last) riêng biệt. Để chọn được đôi giày vừa vặn nhất:
+- Đo chiều dài chân vào buổi chiều tối khi bàn chân đã giãn nở tối đa.
+- Đặt bàn chân lên tờ giấy A4, dùng bút vẽ viền bàn chân và đo khoảng cách từ gót đến ngón dài nhất.
+- Cộng thêm 0.5cm - 1.0cm để có độ cử động ngón chân thoải mái.`,
+    featuredImage: 'https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?w=800&auto=format&fit=crop&q=80',
+    status: 'published',
+    publishedAt: '2025-01-28T09:00:00Z',
+    views: 2150,
+  }
+];
+
+export const INITIAL_REVIEWS: Review[] = [];
+
+export const INITIAL_ORDERS: Order[] = [];
+
+export const initialStores = [
+  {
+    id: 'store-1',
+    name: 'PY Flagship Store - Quận 1',
+    address: '45 Lê Duẩn, Phường Bến Nghé, Quận 1, TP. Hồ Chí Minh',
+    phone: '028 3822 9999',
+    openingHours: '09:00 - 22:00 (Tất cả các ngày trong tuần)',
+    mapUrl: 'https://maps.google.com',
+    services: ['Thử giày trực tiếp', 'Đo size 3D chân chuyên nghiệp', 'Spa & Vệ sinh giày sneaker lấy liền', 'Đổi trả size trong 30 ngày', 'Bảo hành chính hãng 12 tháng'],
+    image: 'https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?w=800&auto=format&fit=crop&q=80',
+  },
+  {
+    id: 'store-2',
+    name: 'PY Concept Store - Thảo Điền',
+    address: '12 Quốc Hương, Thảo Điền, TP. Thủ Đức, TP. Hồ Chí Minh',
+    phone: '028 3744 8888',
+    openingHours: '09:30 - 21:30',
+    mapUrl: 'https://maps.google.com',
+    services: ['Bộ sưu tập Giày giới hạn (Hype/Limited)', 'Khu vực thử giày bóng rổ sân mini', 'Custom Sneaker theo yêu cầu', 'Dịch vụ giao hàng hỏa tốc 2h'],
+    image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&auto=format&fit=crop&q=80',
+  },
+  {
+    id: 'store-3',
+    name: 'PY Tràng Tiền - Hoàn Kiếm',
+    address: '28 Tràng Tiền, Quận Hoàn Kiếm, Hà Nội',
+    phone: '024 3936 6666',
+    openingHours: '09:00 - 22:00',
+    mapUrl: 'https://maps.google.com',
+    services: ['Thử giày trực tiếp', 'Bảo dưỡng & Dán đế Vibram', 'Phụ kiện sneaker chính hãng', 'Thu cũ đổi mới trợ giá lên đến 30%'],
+    image: 'https://images.unsplash.com/photo-1472851294608-062f824d29cc?w=800&auto=format&fit=crop&q=80',
+  },
+  {
+    id: 'store-4',
+    name: 'PY Cầu Giấy - Hà Nội',
+    address: '120 Cầu Giấy, Quận Cầu Giấy, Hà Nội',
+    phone: '024 3767 7777',
+    openingHours: '09:00 - 21:30',
+    mapUrl: 'https://maps.google.com',
+    services: ['Giày chạy bộ chuyên sâu & phân tích dáng chạy', 'Khu trải nghiệm thể thao đa năng', 'Miễn phí vệ sinh giày cho thành viên'],
+    image: 'https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?w=800&auto=format&fit=crop&q=80',
+  },
+];
+
+export const initialBlogPosts = [
+  {
+    id: 'blog-1',
+    title: 'Top 7 Đôi Giày Sneaker Đi Làm Vừa Lịch Sự Vừa Êm Chân Cực Hot Năm 2025',
+    slug: 'top-7-doi-giay-sneaker-di-lam-lich-su-em-chan-2025',
+    excerpt: 'Khám phá những mẫu giày sneaker màu trung tính thanh lịch, đệm êm ái hỗ trợ đứng cả ngày mà vẫn chuẩn phong cách smart-casual cho dân công sở.',
+    category: 'Xu Hướng & Phong Cách',
+    author: 'PY Editorial Team',
+    publishedDate: '12/02/2025',
+    readingTime: '5 phút đọc',
+    coverImage: 'https://images.unsplash.com/photo-1552346154-21d32810aba3?w=800&auto=format&fit=crop&q=80',
+    content: `
+      Giày sneaker ngày nay không chỉ dành cho phòng tập hay những buổi dạo phố cuối tuần, mà đã trở thành món đồ không thể thiếu trong tủ đồ công sở hiện đại.
+      
+      ## 1. Nike Air Force 1 '07 All White - Biểu tượng không bao giờ lỗi mốt
+      Với chất liệu da mịn cao cấp và form dáng cứng cáp, phối màu trắng tinh khôi của Air Force 1 dễ dàng kết hợp cùng quần âu, kaki hay suit hiện đại.
+      
+      ## 2. Adidas Samba OG Cloud White - Cơn sốt phong cách Blokecore
+      Thiết kế mũi da lộn chữ T và đế gum cổ điển giúp bộ trang phục công sở thêm phần tinh tế, vừa cổ điển vừa thời thượng.
+      
+      ## 3. New Balance 574 Core Grey - Êm ái tối đa với công nghệ ENCAP
+      Nếu công việc của bạn đòi hỏi phải di chuyển nhiều, New Balance 574 là lựa chọn số 1 về độ êm và hỗ trợ bàn chân cả ngày dài.
+    `,
+  },
+  {
+    id: 'blog-2',
+    title: 'Hướng Dẫn Vệ Sinh Giày Sneaker Trắng Tại Nhà Đúng Cách Không Bị Ố Vàng',
+    slug: 'huong-dan-ve-sinh-giay-sneaker-trang-tai-nha-dung-cach',
+    excerpt: 'Chia sẻ các bước làm sạch giày da, vải canvas và đế cao su với dung dịch chuyên dụng, bí quyết phơi khô giúp giày giữ màu trắng sáng như mới.',
+    category: 'Bảo Quản & Chăm Sóc',
+    author: 'Chuyên Gia Chăm Sóc Giày',
+    publishedDate: '18/02/2025',
+    readingTime: '7 phút đọc',
+    coverImage: 'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=800&auto=format&fit=crop&q=80',
+    content: `
+      Một đôi giày sneaker trắng tinh tươm luôn mang lại vẻ ngoài chỉn chu và thu hút. Tuy nhiên, việc giữ cho giày không bị ố vàng sau khi giặt là nỗi trăn trở của nhiều bạn trẻ.
+      
+      ## Các bước làm sạch chuẩn chuyên gia:
+      1. **Tháo dây và lót giày:** Giặt riêng dây giày trong nước ấm pha xà phòng nhẹ.
+      2. **Dùng bàn chải lông mềm:** Chà nhẹ nhàng phần thân giày cùng dung dịch tạo bọt chuyên dụng.
+      3. **Không phơi trực tiếp dưới ánh nắng gắt:** Luôn để giày khô tự nhiên nơi thoáng mát có gió, hoặc bọc giấy ăn thấm nước quanh thân giày để hút hết tạp chất gây ố vàng.
+    `,
+  },
+  {
+    id: 'blog-3',
+    title: 'Cách Chọn Size Giày Chuẩn Xác 100% Khi Mua Online Không Sợ Bị Chật',
+    slug: 'cach-chon-size-giay-chuan-xac-khi-mua-online',
+    excerpt: 'Tổng hợp bảng quy đổi size US/UK/EU/CM của các hãng Nike, Adidas, Jordan, New Balance và mẹo đo chiều dài bàn chân chính xác tại nhà.',
+    category: 'Cẩm Nang Mua Sắm',
+    author: 'PY Support',
+    publishedDate: '25/02/2025',
+    readingTime: '4 phút đọc',
+    coverImage: 'https://images.unsplash.com/photo-1460353581641-37baddab0fa2?w=800&auto=format&fit=crop&q=80',
+    content: `
+      Mỗi thương hiệu giày có form dáng và bảng đo size khác nhau. Để chọn được đôi giày vừa vặn nhất:
+      
+      - Đo chiều dài bàn chân vào buổi chiều tối khi chân đạt kích thước lớn nhất trong ngày.
+      - Với các dòng giày form ôm như Jordan 1 Low hay Nike Dunk, bạn nên cân nhắc tăng 0.5 size nếu có mu bàn chân dày hoặc bè ngang.
+      - PY luôn hỗ trợ đổi size miễn phí tận nhà trong vòng 30 ngày nếu không vừa.
+    `,
+  },
+];

@@ -1,0 +1,8 @@
+{
+  "name": "PY Footwear & Sneakers",
+  "description": "Website thương mại điện tử chuyên bán giày chính hãng PY Footwear & Sneakers với quản lý biến thể size/màu, giỏ hàng, thanh toán VNPay/COD, coupon, quản lý đơn hàng và trang quản trị Admin.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
