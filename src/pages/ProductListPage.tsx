@@ -12,6 +12,7 @@ import {
   Flame,
   Search,
   Check,
+  Award,
 } from 'lucide-react';
 
 interface ProductListPageParams {
@@ -213,6 +214,8 @@ export const ProductListPage: React.FC<ProductListPageProps> = ({ onNavigate, in
                 ? 'Sản Phẩm Sale Khủng'
                 : filterType === 'new'
                 ? 'Hàng Mới Về'
+                : filterType === 'bestseller'
+                ? 'Sản Phẩm Bán Chạy Nhất'
                 : selectedBrand !== 'all'
                 ? `Giày ${selectedBrand.toUpperCase()}`
                 : selectedCategory !== 'all'
@@ -288,6 +291,17 @@ export const ProductListPage: React.FC<ProductListPageProps> = ({ onNavigate, in
             <Sparkles className="w-3.5 h-3.5" />
             <span>Hàng Mới</span>
           </button>
+          <button
+            onClick={() => setFilterType(filterType === 'bestseller' ? 'all' : 'bestseller')}
+            className={`flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
+              filterType === 'bestseller'
+                ? 'bg-amber-600 text-white shadow-sm'
+                : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300'
+            }`}
+          >
+            <Award className="w-3.5 h-3.5" />
+            <span>Bán Chạy</span>
+          </button>
           {brands.map(b => (
             <button
               key={b.id}
@@ -310,7 +324,7 @@ export const ProductListPage: React.FC<ProductListPageProps> = ({ onNavigate, in
             
             {filterType !== 'all' && (
               <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300 text-xs font-bold rounded-lg border border-rose-200 dark:border-rose-800">
-                {filterType === 'sale' ? 'Đang Giảm Giá' : filterType === 'new' ? 'Hàng Mới' : 'Bán Chạy'}
+                {filterType === 'sale' ? 'Đang Giảm Giá' : filterType === 'new' ? 'Hàng Mới' : 'Bán Chạy Nhất'}
                 <button onClick={() => setFilterType('all')}><X className="w-3 h-3" /></button>
               </span>
             )}

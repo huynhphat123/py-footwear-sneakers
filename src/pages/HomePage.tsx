@@ -45,53 +45,6 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
   return (
     <div className="space-y-8 sm:space-y-16 pb-12 sm:pb-16">
       
-      {/* 0. MOBILE QUICK CATEGORY & BRAND CHIPS (Horizontal Scroll) */}
-      <section className="px-4 sm:px-6 lg:px-8 pt-2">
-        <div className="flex items-center gap-2.5 overflow-x-auto no-scrollbar py-1">
-          <button
-            onClick={() => onNavigate('products', { filter: 'sale' })}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-2xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-rose-600 dark:text-rose-400 font-extrabold text-xs whitespace-nowrap shadow-sm active:scale-95 transition-all shrink-0"
-          >
-            <Flame className="w-3.5 h-3.5 animate-bounce" />
-            <span>Săn Sale -40%</span>
-          </button>
-
-          <button
-            onClick={() => onNavigate('products', { filter: 'new' })}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-2xl bg-neutral-900 dark:bg-white text-white dark:text-neutral-950 font-extrabold text-xs whitespace-nowrap shadow-sm active:scale-95 transition-all shrink-0"
-          >
-            <Sparkles className="w-3.5 h-3.5 text-amber-400 dark:text-amber-500" />
-            <span>Hàng Mới</span>
-          </button>
-
-          {brands.map(brand => (
-            <button
-              key={brand.id}
-              onClick={() => onNavigate('products', { brand: brand.slug })}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-2xl bg-white dark:bg-[#1a1a1a] border border-neutral-200 dark:border-neutral-800 text-neutral-800 dark:text-neutral-200 font-bold text-xs whitespace-nowrap shadow-sm hover:border-neutral-900 dark:hover:border-white active:scale-95 transition-all shrink-0"
-            >
-              <img
-                src={brand.logo}
-                alt={brand.name}
-                className="w-4 h-4 object-contain rounded"
-                referrerPolicy="no-referrer"
-              />
-              <span>{brand.name}</span>
-            </button>
-          ))}
-
-          {categories.slice(0, 4).map(cat => (
-            <button
-              key={cat.id}
-              onClick={() => onNavigate('products', { category: cat.slug })}
-              className="px-3 py-2 rounded-2xl bg-neutral-100 dark:bg-neutral-800/80 text-neutral-700 dark:text-neutral-300 font-semibold text-xs whitespace-nowrap hover:bg-neutral-200 dark:hover:bg-neutral-700 active:scale-95 transition-all shrink-0"
-            >
-              {cat.name}
-            </button>
-          ))}
-        </div>
-      </section>
-
       {/* 1. HERO BANNER */}
       <section className="relative overflow-hidden bg-neutral-950 text-white rounded-3xl mx-3 sm:mx-6 lg:mx-8 shadow-2xl">
         <div className="grid grid-cols-1 lg:grid-cols-12 min-h-[420px] sm:min-h-[540px] items-center">
@@ -158,8 +111,9 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
                 referrerPolicy="no-referrer"
               />
               <div className="absolute -bottom-3 -left-3 bg-neutral-900/95 backdrop-blur-md p-3 sm:p-4 rounded-2xl border border-neutral-700 shadow-xl hidden sm:block">
-                <div className="text-[10px] uppercase font-bold text-amber-400">Đặc Quyền Hội Viên</div>
-                <div className="text-xs font-bold text-white mt-0.5">Tặng Voucher 150.000đ khi đăng ký</div>
+                <div className="text-xs text-neutral-400">Xu hướng nổi bật</div>
+                <div className="text-sm font-bold text-white">Nike Air Jordan Retro</div>
+                <div className="text-xs font-extrabold text-rose-500 mt-0.5">Tiết kiệm 20% hôm nay</div>
               </div>
             </div>
           </div>
@@ -179,10 +133,12 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
           <button
             id="see-all-brands-btn"
             onClick={() => onNavigate('products')}
-            className="text-xs font-bold text-neutral-900 dark:text-neutral-200 hover:underline flex items-center gap-1"
+            className="text-xs font-bold text-neutral-900 dark:text-neutral-200 hover:underline flex items-center gap-1.5 group"
           >
             <span>Tất cả</span>
-            <ChevronRight className="w-4 h-4" />
+            <span className="w-5 h-5 rounded-full bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center group-hover:bg-neutral-200 dark:group-hover:bg-neutral-700 transition-colors">
+              <ChevronRight className="w-3.5 h-3.5" />
+            </span>
           </button>
         </div>
 
@@ -192,7 +148,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
               key={brand.id}
               id={`brand-card-${brand.slug}`}
               onClick={() => onNavigate('products', { brand: brand.slug })}
-              className="flex flex-col items-center justify-center p-3 sm:p-4 bg-white dark:bg-[#1a1a1a] rounded-2xl border border-neutral-100 dark:border-neutral-800 hover:border-neutral-900 dark:hover:border-white hover:shadow-md transition-all group"
+              className="flex flex-col items-center justify-center p-3 sm:p-4 bg-white dark:bg-[#1a1a1a] rounded-2xl border border-neutral-100 dark:border-neutral-800 hover:border-neutral-900 dark:hover:border-white hover:shadow-md transition-all group active:scale-95"
             >
               <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl overflow-hidden mb-1.5 sm:mb-2 flex items-center justify-center p-1 bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 group-hover:scale-105 transition-transform">
                 <img
@@ -228,23 +184,33 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
               </div>
             </div>
 
-            {/* Countdown Timer */}
-            <div className="flex items-center gap-2 bg-neutral-900/80 sm:bg-transparent p-2 sm:p-0 rounded-xl border border-rose-900/30 sm:border-0">
-              <Clock className="w-4 h-4 text-rose-400 shrink-0" />
-              <span className="text-[11px] sm:text-xs font-semibold text-neutral-300">Kết thúc sau:</span>
-              <div className="flex items-center gap-1 font-mono font-extrabold text-xs sm:text-sm ml-auto sm:ml-0">
-                <span className="px-2 sm:px-2.5 py-1 sm:py-1.5 bg-rose-900/80 border border-rose-700 rounded-lg text-white">
-                  {String(timeLeft.hours).padStart(2, '0')}
-                </span>
-                <span className="text-rose-400">:</span>
-                <span className="px-2 sm:px-2.5 py-1 sm:py-1.5 bg-rose-900/80 border border-rose-700 rounded-lg text-white">
-                  {String(timeLeft.minutes).padStart(2, '0')}
-                </span>
-                <span className="text-rose-400">:</span>
-                <span className="px-2 sm:px-2.5 py-1 sm:py-1.5 bg-rose-600 rounded-lg text-white animate-pulse">
-                  {String(timeLeft.seconds).padStart(2, '0')}
-                </span>
+            {/* Countdown Timer & See All Button */}
+            <div className="flex items-center justify-between sm:justify-end gap-3">
+              <div className="flex items-center gap-2 bg-neutral-900/80 sm:bg-transparent p-2 sm:p-0 rounded-xl border border-rose-900/30 sm:border-0">
+                <Clock className="w-4 h-4 text-rose-400 shrink-0" />
+                <span className="text-[11px] sm:text-xs font-semibold text-neutral-300">Còn:</span>
+                <div className="flex items-center gap-1 font-mono font-extrabold text-xs sm:text-sm">
+                  <span className="px-2 py-1 bg-rose-900/80 border border-rose-700 rounded-lg text-white">
+                    {String(timeLeft.hours).padStart(2, '0')}
+                  </span>
+                  <span className="text-rose-400">:</span>
+                  <span className="px-2 py-1 bg-rose-900/80 border border-rose-700 rounded-lg text-white">
+                    {String(timeLeft.minutes).padStart(2, '0')}
+                  </span>
+                  <span className="text-rose-400">:</span>
+                  <span className="px-2 py-1 bg-rose-600 rounded-lg text-white animate-pulse">
+                    {String(timeLeft.seconds).padStart(2, '0')}
+                  </span>
+                </div>
               </div>
+
+              <button
+                onClick={() => onNavigate('products', { filter: 'sale' })}
+                className="text-xs font-bold text-rose-300 hover:text-white flex items-center gap-1 bg-rose-900/40 border border-rose-700/50 px-2.5 py-1.5 rounded-xl sm:bg-transparent sm:border-0 sm:p-0"
+              >
+                <span>Xem hết</span>
+                <ChevronRight className="w-4 h-4" />
+              </button>
             </div>
           </div>
 
@@ -253,6 +219,17 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
             {flashSaleProducts.map(prod => (
               <ProductCard key={prod.id} product={prod} onNavigate={onNavigate} />
             ))}
+          </div>
+
+          {/* Mobile Bottom Arrow Button */}
+          <div className="mt-3.5 sm:hidden">
+            <button
+              onClick={() => onNavigate('products', { filter: 'sale' })}
+              className="w-full py-2.5 px-4 bg-white/10 hover:bg-white/20 active:scale-98 rounded-xl text-xs font-bold text-white flex items-center justify-center gap-1.5 transition-all"
+            >
+              <span>Xem tất cả sản phẩm Flash Sale</span>
+              <ChevronRight className="w-4 h-4" />
+            </button>
           </div>
 
         </div>
@@ -273,10 +250,12 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
           <button
             id="see-all-new-btn"
             onClick={() => onNavigate('products', { filter: 'new' })}
-            className="text-xs font-bold text-neutral-900 dark:text-neutral-200 hover:underline flex items-center gap-1"
+            className="text-xs font-bold text-neutral-900 dark:text-neutral-200 hover:underline flex items-center gap-1.5 group"
           >
             <span>Xem tất cả</span>
-            <ChevronRight className="w-4 h-4" />
+            <span className="w-5 h-5 rounded-full bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center group-hover:bg-neutral-200 dark:group-hover:bg-neutral-700 transition-colors">
+              <ChevronRight className="w-3.5 h-3.5" />
+            </span>
           </button>
         </div>
 
@@ -285,6 +264,17 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
           {newArrivals.map(prod => (
             <ProductCard key={prod.id} product={prod} onNavigate={onNavigate} />
           ))}
+        </div>
+
+        {/* Mobile Bottom Arrow Button */}
+        <div className="mt-3.5 sm:hidden">
+          <button
+            onClick={() => onNavigate('products', { filter: 'new' })}
+            className="w-full py-2.5 px-4 bg-neutral-100 dark:bg-neutral-800/80 active:scale-98 rounded-xl text-xs font-bold text-neutral-900 dark:text-white flex items-center justify-center gap-1.5 transition-all"
+          >
+            <span>Xem tất cả Hàng Mới Về</span>
+            <ChevronRight className="w-4 h-4" />
+          </button>
         </div>
       </section>
 
@@ -342,10 +332,12 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
           <button
             id="see-all-bestsellers-btn"
             onClick={() => onNavigate('products', { filter: 'bestseller' })}
-            className="text-xs font-bold text-neutral-900 dark:text-neutral-200 hover:underline flex items-center gap-1"
+            className="text-xs font-bold text-neutral-900 dark:text-neutral-200 hover:underline flex items-center gap-1.5 group"
           >
             <span>Xem tất cả</span>
-            <ChevronRight className="w-4 h-4" />
+            <span className="w-5 h-5 rounded-full bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center group-hover:bg-neutral-200 dark:group-hover:bg-neutral-700 transition-colors">
+              <ChevronRight className="w-3.5 h-3.5" />
+            </span>
           </button>
         </div>
 
@@ -354,6 +346,17 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
           {bestSellers.map(prod => (
             <ProductCard key={prod.id} product={prod} onNavigate={onNavigate} />
           ))}
+        </div>
+
+        {/* Mobile Bottom Arrow Button */}
+        <div className="mt-3.5 sm:hidden">
+          <button
+            onClick={() => onNavigate('products', { filter: 'bestseller' })}
+            className="w-full py-2.5 px-4 bg-neutral-100 dark:bg-neutral-800/80 active:scale-98 rounded-xl text-xs font-bold text-neutral-900 dark:text-white flex items-center justify-center gap-1.5 transition-all"
+          >
+            <span>Xem tất cả Sản Phẩm Bán Chạy</span>
+            <ChevronRight className="w-4 h-4" />
+          </button>
         </div>
       </section>
 

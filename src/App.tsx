@@ -42,8 +42,17 @@ const MainApp: React.FC = () => {
   const handleNavigate = (page: string, params: Record<string, any> = {}) => {
     setCurrentPage(page);
     setPageParams(params);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
   };
+
+  // Scroll to top automatically whenever page or params change
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  }, [currentPage, pageParams]);
 
   // Render Admin View if in admin mode
   if (currentPage === 'admin') {
@@ -95,12 +104,7 @@ const MainApp: React.FC = () => {
 
         {currentPage === 'products' && (
           <ProductListPage
-            initialCategory={pageParams.category}
-            initialBrand={pageParams.brand}
-            initialGender={pageParams.gender}
-            initialQuery={pageParams.query}
-            initialIsSale={pageParams.isSale}
-            initialIsNew={pageParams.isNew}
+            initialParams={pageParams}
             onNavigate={handleNavigate}
           />
         )}
