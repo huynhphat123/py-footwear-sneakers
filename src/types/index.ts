@@ -230,10 +230,15 @@ export interface BlogPost {
   category: string;
   author: string;
   excerpt: string;
+  summary?: string;
   content: string;
   featuredImage: string;
+  coverImage?: string;
+  image?: string;
   status: 'published' | 'draft';
   publishedAt: string;
+  publishedDate?: string;
+  readingTime?: string;
   views: number;
 }
 

@@ -70,11 +70,19 @@ function setStored<T>(key: string, data: T): void {
 export const StorageService = {
   // PRODUCTS
   getProducts(): Product[] {
-    return getStored<Product[]>(KEYS.PRODUCTS, INITIAL_PRODUCTS).filter(p => !p.deletedAt);
+    return this.getAllProductsIncludingSoftDeleted().filter(p => !p.deletedAt);
   },
 
   getAllProductsIncludingSoftDeleted(): Product[] {
-    return getStored<Product[]>(KEYS.PRODUCTS, INITIAL_PRODUCTS);
+    const stored = getStored<Product[]>(KEYS.PRODUCTS, INITIAL_PRODUCTS);
+    const storedIds = new Set(stored.map(p => p.id));
+    const missing = INITIAL_PRODUCTS.filter(p => !storedIds.has(p.id));
+    if (missing.length > 0) {
+      const merged = [...stored, ...missing];
+      setStored(KEYS.PRODUCTS, merged);
+      return merged;
+    }
+    return stored;
   },
 
   getProductById(id: string): Product | undefined {
@@ -462,7 +470,28 @@ export const StorageService = {
 
   // BLOGS
   getBlogs(): BlogPost[] {
-    return getStored<BlogPost[]>(KEYS.BLOGS, INITIAL_BLOGS);
+    const stored = getStored<BlogPost[]>(KEYS.BLOGS, INITIAL_BLOGS);
+    const storedIds = new Set(stored.map(b => b.id));
+    const missing = INITIAL_BLOGS.filter(b => !storedIds.has(b.id));
+    const updated = stored.map(blog => {
+      const initial = INITIAL_BLOGS.find(b => b.id === blog.id);
+      if (initial && (!blog.featuredImage || !blog.image || !blog.coverImage)) {
+        return {
+          ...blog,
+          featuredImage: blog.featuredImage || initial.featuredImage,
+          coverImage: blog.coverImage || initial.coverImage,
+          image: blog.image || initial.image || initial.featuredImage,
+          publishedDate: blog.publishedDate || initial.publishedDate,
+        };
+      }
+      return blog;
+    });
+    if (missing.length > 0) {
+      const merged = [...updated, ...missing];
+      setStored(KEYS.BLOGS, merged);
+      return merged;
+    }
+    return updated;
   },
 
   saveBlog(blog: BlogPost): void {

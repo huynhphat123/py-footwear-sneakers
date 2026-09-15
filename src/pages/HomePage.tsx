@@ -23,6 +23,9 @@ interface HomePageProps {
 export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
   const { products, categories, brands, blogs } = useShop();
 
+  // Selected brand tab for showcase grid
+  const [activeBrandTab, setActiveBrandTab] = useState<string>('all');
+
   // Flash sale countdown timer state
   const [timeLeft, setTimeLeft] = useState({ hours: 14, minutes: 35, seconds: 48 });
 
@@ -38,9 +41,13 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
     return () => clearInterval(timer);
   }, []);
 
-  const flashSaleProducts = products.filter(p => p.salePrice && p.salePrice < p.originalPrice).slice(0, 4);
-  const newArrivals = products.filter(p => p.isNew).slice(0, 4);
-  const bestSellers = products.filter(p => p.isBestSeller).slice(0, 4);
+  const flashSaleProducts = products.filter(p => p.salePrice && p.salePrice < p.originalPrice).slice(0, 8);
+  const newArrivals = products.filter(p => p.isNew).slice(0, 8);
+  const bestSellers = products.filter(p => p.isBestSeller).slice(0, 8);
+  
+  const showcaseProducts = activeBrandTab === 'all' 
+    ? products.slice(0, 12) 
+    : products.filter(p => p.brandId === activeBrandTab || p.brandName.toLowerCase().includes(activeBrandTab.toLowerCase())).slice(0, 12);
 
   return (
     <div className="space-y-8 sm:space-y-16 pb-12 sm:pb-16">
@@ -363,6 +370,72 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
         </div>
       </section>
 
+      {/* 6.5. ALL SNEAKERS SHOWCASE WITH BRAND TABS */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-6 gap-4 border-b border-neutral-200 dark:border-neutral-800 pb-4">
+          <div>
+            <div className="flex items-center gap-2 text-rose-600 dark:text-rose-400 text-xs font-bold uppercase tracking-wider mb-1">
+              <TrendingUp className="w-4 h-4" />
+              <span>Bộ Sưu Tập Giày Hot 2025</span>
+            </div>
+            <h2 className="text-xl sm:text-3xl font-extrabold text-neutral-950 dark:text-white uppercase tracking-tight font-['Space_Grotesk']">
+              KHÁM PHÁ THẾ GIỚI SNEAKER
+            </h2>
+            <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
+              Hơn {products.length}+ mẫu giày chính hãng đa dạng phong cách từ các thương hiệu hàng đầu thế giới
+            </p>
+          </div>
+
+          {/* Brand Filter Tabs */}
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 max-w-full">
+            <button
+              onClick={() => setActiveBrandTab('all')}
+              className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${
+                activeBrandTab === 'all'
+                  ? 'bg-neutral-950 text-white dark:bg-white dark:text-neutral-950 shadow-md'
+                  : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-700'
+              }`}
+            >
+              Tất cả ({products.length})
+            </button>
+            {brands.slice(0, 7).map(brand => {
+              const count = products.filter(p => p.brandId === brand.id || p.brandName.toLowerCase() === brand.name.toLowerCase()).length;
+              return (
+                <button
+                  key={brand.id}
+                  onClick={() => setActiveBrandTab(brand.id)}
+                  className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${
+                    activeBrandTab === brand.id
+                      ? 'bg-neutral-950 text-white dark:bg-white dark:text-neutral-950 shadow-md'
+                      : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-700'
+                  }`}
+                >
+                  {brand.name} {count > 0 ? `(${count})` : ''}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Product Grid */}
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-6">
+          {showcaseProducts.map(prod => (
+            <ProductCard key={prod.id} product={prod} onNavigate={onNavigate} />
+          ))}
+        </div>
+
+        {/* Explore All Button */}
+        <div className="mt-8 text-center">
+          <button
+            onClick={() => onNavigate('products')}
+            className="inline-flex items-center gap-2 px-8 py-3.5 bg-neutral-950 text-white dark:bg-white dark:text-neutral-950 font-extrabold text-xs sm:text-sm rounded-2xl hover:scale-105 active:scale-95 transition-all shadow-xl group"
+          >
+            <span>Xem Toàn Bộ {products.length} Mẫu Giày Trong Cửa Hàng</span>
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+          </button>
+        </div>
+      </section>
+
       {/* 7. AUTHENTICITY & SERVICE BANNER */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-neutral-100 dark:bg-[#1a1a1a] rounded-3xl p-6 sm:p-12 grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 items-center border border-neutral-200/60 dark:border-neutral-800">
@@ -435,42 +508,56 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
-          {blogs.slice(0, 3).map(post => (
-            <div
-              key={post.id}
-              onClick={() => onNavigate('blog-detail', { slug: post.slug })}
-              className="bg-white dark:bg-[#1a1a1a] rounded-3xl border border-neutral-100 dark:border-neutral-800 overflow-hidden hover:shadow-xl hover:border-neutral-200 dark:hover:border-neutral-700 transition-all cursor-pointer group flex flex-col"
-            >
-              <div className="aspect-video w-full overflow-hidden bg-neutral-100 dark:bg-neutral-800">
-                <img
-                  src={post.image}
-                  alt={post.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  referrerPolicy="no-referrer"
-                />
-              </div>
-              <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between">
-                <div>
-                  <div className="flex items-center gap-2 text-[10px] sm:text-[11px] font-bold text-neutral-400 uppercase tracking-wider mb-1.5 sm:mb-2">
-                    <span className="text-amber-600 dark:text-amber-400">{post.category}</span>
-                    <span>•</span>
-                    <span>{post.publishedAt}</span>
-                  </div>
-                  <h3 className="text-xs sm:text-base font-extrabold text-neutral-950 dark:text-white group-hover:text-rose-600 dark:group-hover:text-rose-400 line-clamp-2 leading-snug transition-colors">
-                    {post.title}
-                  </h3>
-                  <p className="text-[11px] sm:text-xs text-neutral-500 dark:text-neutral-400 line-clamp-2 mt-1.5 sm:mt-2 leading-relaxed">
-                    {post.summary}
-                  </p>
-                </div>
+          {blogs.slice(0, 3).map(post => {
+            const blogImg = post.featuredImage || post.coverImage || post.image || 'https://images.unsplash.com/photo-1552346154-21d32810aba3?w=800&auto=format&fit=crop&q=80';
+            const displayDate = post.publishedDate || (post.publishedAt ? new Date(post.publishedAt).toLocaleDateString('vi-VN') : '15/02/2025');
+            const displayExcerpt = post.excerpt || post.summary || 'Khám phá những tin tức và xu hướng sneaker thịnh hành mới nhất tại PY Footwear.';
 
-                <div className="pt-3 sm:pt-4 mt-3 sm:mt-4 border-t border-neutral-100 dark:border-neutral-800 flex items-center justify-between text-xs font-bold text-neutral-900 dark:text-white group-hover:underline">
-                  <span>Đọc tiếp</span>
-                  <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+            return (
+              <div
+                key={post.id}
+                onClick={() => onNavigate('blog-detail', { slug: post.slug })}
+                className="bg-white dark:bg-[#1a1a1a] rounded-3xl border border-neutral-100 dark:border-neutral-800 overflow-hidden hover:shadow-xl hover:border-neutral-200 dark:hover:border-neutral-700 transition-all cursor-pointer group flex flex-col"
+              >
+                <div className="aspect-video w-full overflow-hidden bg-neutral-100 dark:bg-neutral-800 relative">
+                  <img
+                    src={blogImg}
+                    alt={post.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    referrerPolicy="no-referrer"
+                    onError={(e) => {
+                      (e.currentTarget as HTMLImageElement).src = 'https://images.unsplash.com/photo-1552346154-21d32810aba3?w=800&auto=format&fit=crop&q=80';
+                    }}
+                  />
+                  <div className="absolute top-3 left-3">
+                    <span className="px-2.5 py-1 bg-neutral-950/80 backdrop-blur-md text-white text-[10px] font-bold rounded-lg shadow-sm">
+                      {post.category}
+                    </span>
+                  </div>
+                </div>
+                <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between">
+                  <div>
+                    <div className="flex items-center gap-2 text-[10px] sm:text-[11px] font-bold text-neutral-400 uppercase tracking-wider mb-1.5 sm:mb-2">
+                      <span className="text-amber-600 dark:text-amber-400">{post.category}</span>
+                      <span>•</span>
+                      <span>{displayDate}</span>
+                    </div>
+                    <h3 className="text-xs sm:text-base font-extrabold text-neutral-950 dark:text-white group-hover:text-rose-600 dark:group-hover:text-rose-400 line-clamp-2 leading-snug transition-colors">
+                      {post.title}
+                    </h3>
+                    <p className="text-[11px] sm:text-xs text-neutral-500 dark:text-neutral-400 line-clamp-2 mt-1.5 sm:mt-2 leading-relaxed">
+                      {displayExcerpt}
+                    </p>
+                  </div>
+
+                  <div className="pt-3 sm:pt-4 mt-3 sm:mt-4 border-t border-neutral-100 dark:border-neutral-800 flex items-center justify-between text-xs font-bold text-neutral-900 dark:text-white group-hover:underline">
+                    <span>Đọc tiếp</span>
+                    <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </section>
 

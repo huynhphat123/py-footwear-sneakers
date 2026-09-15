@@ -109,19 +109,33 @@ interface ShopContextType {
 const ShopContext = createContext<ShopContextType | undefined>(undefined);
 
 export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  // State
-  const [products, setProducts] = useState<Product[]>([]);
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [brands, setBrands] = useState<Brand[]>([]);
-  const [coupons, setCoupons] = useState<Coupon[]>([]);
-  const [giftCards, setGiftCards] = useState<GiftCard[]>([]);
-  const [stores, setStores] = useState<StoreLocation[]>([]);
-  const [blogs, setBlogs] = useState<BlogPost[]>([]);
-  const [settings, setSettings] = useState<StoreSettings>(StorageService.getSettings());
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const [cart, setCart] = useState<CartItem[]>([]);
-  const [wishlist, setWishlist] = useState<string[]>([]);
-  const [allOrders, setAllOrders] = useState<Order[]>([]);
+  // State with lazy initializers from localStorage/StorageService
+  const [products, setProducts] = useState<Product[]>(() => StorageService.getProducts());
+  const [categories, setCategories] = useState<Category[]>(() => StorageService.getCategories());
+  const [brands, setBrands] = useState<Brand[]>(() => StorageService.getBrands());
+  const [coupons, setCoupons] = useState<Coupon[]>(() => StorageService.getCoupons());
+  const [giftCards, setGiftCards] = useState<GiftCard[]>(() => StorageService.getGiftCards());
+  const [stores, setStores] = useState<StoreLocation[]>(() => StorageService.getStores());
+  const [blogs, setBlogs] = useState<BlogPost[]>(() => StorageService.getBlogs());
+  const [settings, setSettings] = useState<StoreSettings>(() => StorageService.getSettings());
+  const [currentUser, setCurrentUser] = useState<User | null>(() => StorageService.getCurrentUser());
+  const [cart, setCart] = useState<CartItem[]>(() => {
+    try {
+      const savedCart = localStorage.getItem('solevault_active_cart');
+      return savedCart ? JSON.parse(savedCart) : [];
+    } catch {
+      return [];
+    }
+  });
+  const [wishlist, setWishlist] = useState<string[]>(() => {
+    try {
+      const savedWishlist = localStorage.getItem('solevault_active_wishlist');
+      return savedWishlist ? JSON.parse(savedWishlist) : [];
+    } catch {
+      return [];
+    }
+  });
+  const [allOrders, setAllOrders] = useState<Order[]>(() => StorageService.getOrders());
 
   // Theme State ('light' | 'dark')
   const [theme, setThemeState] = useState<'light' | 'dark'>(() => {

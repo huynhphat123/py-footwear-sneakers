@@ -86,10 +86,13 @@ export const BlogDetailPage: React.FC<BlogDetailPageProps> = ({ slug, onNavigate
       {/* 3. FEATURED IMAGE */}
       <div className="rounded-3xl overflow-hidden aspect-video bg-neutral-100 border border-neutral-200/80 shadow-sm">
         <img
-          src={post.coverImage}
+          src={post.coverImage || post.featuredImage || post.image || 'https://images.unsplash.com/photo-1552346154-21d32810aba3?w=800&auto=format&fit=crop&q=80'}
           alt={post.title}
           className="w-full h-full object-cover"
           referrerPolicy="no-referrer"
+          onError={(e) => {
+            (e.currentTarget as HTMLImageElement).src = 'https://images.unsplash.com/photo-1552346154-21d32810aba3?w=800&auto=format&fit=crop&q=80';
+          }}
         />
       </div>
 
@@ -139,7 +142,15 @@ export const BlogDetailPage: React.FC<BlogDetailPageProps> = ({ slug, onNavigate
               className="bg-white rounded-2xl border border-neutral-100 overflow-hidden shadow-sm hover:shadow-md cursor-pointer group transition-all"
             >
               <div className="aspect-video overflow-hidden bg-neutral-100">
-                <img src={rel.coverImage} alt={rel.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+                <img
+                  src={rel.coverImage || rel.featuredImage || rel.image || 'https://images.unsplash.com/photo-1552346154-21d32810aba3?w=800&auto=format&fit=crop&q=80'}
+                  alt={rel.title}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                  referrerPolicy="no-referrer"
+                  onError={(e) => {
+                    (e.currentTarget as HTMLImageElement).src = 'https://images.unsplash.com/photo-1552346154-21d32810aba3?w=800&auto=format&fit=crop&q=80';
+                  }}
+                />
               </div>
               <div className="p-4 space-y-2">
                 <span className="text-[10px] font-bold text-neutral-400 uppercase">{rel.category}</span>

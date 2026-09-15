@@ -99,7 +99,7 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, onOpenAdmin, current
 
       {/* 1. TOP ANNOUNCEMENT BAR */}
       <div className="bg-neutral-950 text-white text-xs py-2 px-4 border-b border-neutral-800">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
+        <div className="max-w-[1920px] mx-auto flex items-center justify-between">
           <div className="hidden sm:flex items-center gap-6 text-neutral-400">
             <span className="flex items-center gap-1.5 hover:text-white transition-colors cursor-pointer" onClick={() => onNavigate('stores')}>
               <MapPin className="w-3.5 h-3.5 text-neutral-300" /> Hệ thống 4 cửa hàng
@@ -135,7 +135,7 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, onOpenAdmin, current
           ? 'border-neutral-200 dark:border-neutral-800 shadow-md py-3'
           : 'border-neutral-100 dark:border-neutral-800/80 py-4'
         }`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
+        <div className="max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
 
           {/* Mobile hamburger button */}
           <div className="flex items-center lg:hidden">
@@ -565,326 +565,381 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, onOpenAdmin, current
         </div>
       </div>
 
-      {/* 3. MOBILE SLIDE-OUT MENU DRAWER (Mounted directly to document.body via Portal) */}
+      {/* 3. FULL-SCREEN IMMERSIVE NAVIGATION MENU (Mounted directly to document.body via Portal) */}
       {mobileMenuOpen && typeof document !== 'undefined' && createPortal(
-        <div className="fixed inset-0 z-[99999] lg:hidden flex">
-          {/* Overlay */}
-          <div
-            className="fixed inset-0 bg-neutral-950/75 backdrop-blur-sm transition-opacity duration-300 animate-in fade-in"
-            onClick={() => setMobileMenuOpen(false)}
-          />
-
-          {/* Slide Drawer Content */}
-          <div className="relative ml-0 flex flex-col w-[85%] max-w-xs bg-white dark:bg-[#141414] h-full shadow-2xl p-5 overflow-y-auto border-r border-neutral-200 dark:border-neutral-800 animate-in slide-in-from-left duration-300 z-10">
-            
-            {/* Header / Brand & Close */}
-            <div className="flex items-center justify-between pb-4 border-b border-neutral-100 dark:border-neutral-800 shrink-0">
+        <div className="fixed inset-0 z-[99999] bg-white dark:bg-[#121212] text-neutral-900 dark:text-neutral-100 flex flex-col overflow-y-auto animate-in fade-in duration-200">
+          
+          {/* TOP HEADER BAR */}
+          <div className="sticky top-0 z-20 bg-white/95 dark:bg-[#121212]/95 backdrop-blur-md border-b border-neutral-100 dark:border-neutral-800 py-3.5 px-4 sm:px-8">
+            <div className="max-w-6xl mx-auto flex items-center justify-between gap-4">
+              
+              {/* Brand Logo */}
               <div
-                className="flex items-center gap-2.5 cursor-pointer"
+                className="flex items-center gap-3 cursor-pointer group"
                 onClick={() => {
                   setMobileMenuOpen(false);
                   onNavigate('home');
                 }}
               >
-                <div className="w-9 h-9 bg-neutral-950 dark:bg-white text-white dark:text-neutral-950 rounded-xl flex items-center justify-center font-extrabold text-base shadow-sm">
+                <div className="w-10 h-10 bg-neutral-950 dark:bg-white text-white dark:text-neutral-950 rounded-2xl flex items-center justify-center font-extrabold text-lg shadow-md group-hover:scale-105 transition-transform">
                   PY
                 </div>
                 <div>
-                  <div className="font-extrabold text-base text-neutral-950 dark:text-white font-['Space_Grotesk'] leading-none">
+                  <div className="font-extrabold text-base sm:text-lg text-neutral-950 dark:text-white font-['Space_Grotesk'] leading-none">
                     PY SNEAKERS
                   </div>
-                  <div className="text-[9px] uppercase tracking-widest text-neutral-400 font-semibold mt-0.5">
-                    Official Store
+                  <div className="text-[10px] uppercase tracking-widest text-neutral-400 dark:text-neutral-500 font-semibold mt-0.5">
+                    Menu Toàn Màn Hình
                   </div>
                 </div>
               </div>
-              <button
-                id="mobile-close-btn"
-                type="button"
-                onClick={() => setMobileMenuOpen(false)}
-                className="p-2 rounded-xl text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors cursor-pointer"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
 
-            {/* User Profile Card / Login Prompt in Drawer */}
-            <div className="py-4 border-b border-neutral-100 dark:border-neutral-800 shrink-0">
-              {currentUser ? (
-                <div className="p-3 bg-neutral-50 dark:bg-neutral-900/90 rounded-2xl border border-neutral-200/80 dark:border-neutral-800 flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-neutral-950 dark:bg-white text-white dark:text-neutral-950 font-extrabold text-sm flex items-center justify-center shadow-sm">
-                    {currentUser.name.charAt(0).toUpperCase()}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="text-xs font-bold text-neutral-950 dark:text-white truncate">
-                      {currentUser.name}
-                    </div>
-                    <div className="text-[11px] text-neutral-500 dark:text-neutral-400 truncate">
-                      {currentUser.email}
-                    </div>
-                    <div className="flex items-center gap-1.5 mt-1">
-                      <span className="text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300">
-                        {currentUser.role === 'admin' ? 'Quản trị viên' : 'Hội viên'}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                <div className="p-3.5 bg-gradient-to-br from-neutral-900 to-neutral-950 text-white rounded-2xl shadow-md space-y-2.5">
-                  <div>
-                    <div className="text-xs font-extrabold">Chào mừng bạn đến với PY!</div>
-                    <div className="text-[11px] text-neutral-300 mt-0.5">Đăng nhập để xem ưu đãi và tích điểm hội viên</div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-2 pt-1">
-                    <button
-                      id="mob-login-btn"
-                      type="button"
-                      onClick={() => {
-                        setMobileMenuOpen(false);
-                        setAuthModalMode('login');
-                        setIsAuthModalOpen(true);
-                      }}
-                      className="py-2 bg-white text-neutral-950 font-bold text-xs rounded-xl shadow-sm hover:bg-neutral-100 transition-colors text-center cursor-pointer"
-                    >
-                      Đăng nhập
-                    </button>
-                    <button
-                      id="mob-register-btn"
-                      type="button"
-                      onClick={() => {
-                        setMobileMenuOpen(false);
-                        setAuthModalMode('register');
-                        setIsAuthModalOpen(true);
-                      }}
-                      className="py-2 bg-neutral-800 text-white font-bold text-xs rounded-xl hover:bg-neutral-700 transition-colors text-center cursor-pointer"
-                    >
-                      Đăng ký
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* Mobile Theme Toggle Section */}
-            <div className="py-3 border-b border-neutral-100 dark:border-neutral-800 shrink-0">
-              <ThemeToggle id="mobile-theme-toggle-btn" variant="expanded" />
-            </div>
-
-            {/* Mobile Nav Links */}
-            <div className="py-3 flex flex-col space-y-1">
-              <button
-                id="mob-nav-sale-btn"
-                type="button"
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  onNavigate('products', { filter: 'sale' });
-                }}
-                className="flex items-center justify-between py-2.5 px-3 rounded-xl font-bold text-xs text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/30 hover:bg-rose-100 dark:hover:bg-rose-950/50 transition-colors cursor-pointer"
-              >
-                <span className="flex items-center gap-2.5">
-                  <Flame className="w-4 h-4 text-rose-600 dark:text-rose-400 animate-pulse" />
-                  <span>SĂN SALE KHỦNG</span>
-                </span>
-                <span className="text-[10px] bg-rose-600 text-white px-2 py-0.5 rounded-full font-extrabold">-40%</span>
-              </button>
-
-              <button
-                id="mob-nav-new-btn"
-                type="button"
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  onNavigate('products', { filter: 'new' });
-                }}
-                className="flex items-center gap-2.5 py-2.5 px-3 rounded-xl font-bold text-xs text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors text-left cursor-pointer"
-              >
-                <Sparkles className="w-4 h-4 text-amber-500" />
-                <span>HÀNG MỚI VỀ</span>
-              </button>
-
-              <button
-                id="mob-nav-bestseller-btn"
-                type="button"
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  onNavigate('products', { filter: 'bestseller' });
-                }}
-                className="flex items-center gap-2.5 py-2.5 px-3 rounded-xl font-bold text-xs text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors text-left cursor-pointer"
-              >
-                <Layers className="w-4 h-4 text-sky-500" />
-                <span>BÁN CHẠY NHẤT</span>
-              </button>
-
-              {/* Categories Accordion */}
-              <div className="pt-1">
+              {/* Quick Actions & Close Button */}
+              <div className="flex items-center gap-2">
                 <button
-                  type="button"
-                  onClick={() => setMobileCategoriesOpen(prev => !prev)}
-                  className="w-full flex items-center justify-between py-2.5 px-3 rounded-xl font-bold text-xs text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors text-left cursor-pointer"
+                  id="fullscreen-menu-search-btn"
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    setIsSearchOpen(true);
+                  }}
+                  className="hidden sm:flex items-center gap-2 px-4 py-2 bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 text-neutral-700 dark:text-neutral-200 text-xs font-semibold rounded-xl transition-all"
                 >
-                  <span className="flex items-center gap-2.5">
-                    <Package className="w-4 h-4 text-neutral-500" />
-                    <span>DANH MỤC SẢN PHẨM</span>
-                  </span>
-                  <ChevronDown className={`w-4 h-4 transition-transform ${mobileCategoriesOpen ? 'rotate-180' : ''}`} />
+                  <Search className="w-4 h-4 text-neutral-400" />
+                  <span>Tìm kiếm nhanh</span>
                 </button>
 
-                {mobileCategoriesOpen && (
-                  <div className="pl-4 pr-1 py-1 space-y-1">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setMobileMenuOpen(false);
-                        onNavigate('products');
-                      }}
-                      className="w-full text-left py-2 px-3 rounded-lg text-xs font-semibold text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 flex items-center justify-between"
-                    >
-                      <span>Tất cả sản phẩm</span>
-                      <ChevronRight className="w-3.5 h-3.5 text-neutral-400" />
-                    </button>
-                    {categories.map(c => (
+                <button
+                  id="mobile-close-btn"
+                  type="button"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="p-2.5 sm:px-4 sm:py-2 rounded-xl sm:rounded-2xl bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 active:scale-95 text-neutral-900 dark:text-white flex items-center gap-2 font-bold text-xs transition-all shadow-sm cursor-pointer"
+                  title="Đóng menu"
+                >
+                  <X className="w-5 h-5 text-rose-500" />
+                  <span className="hidden sm:inline">Đóng Menu</span>
+                </button>
+              </div>
+
+            </div>
+          </div>
+
+          {/* MAIN FULL-SCREEN CONTENT */}
+          <div className="flex-1 max-w-6xl mx-auto w-full px-4 sm:px-8 py-6 sm:py-10 flex flex-col justify-between space-y-8">
+            
+            {/* 1. TOP USER GREETING & THEME BAR */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              
+              {/* User Account Card */}
+              <div className="md:col-span-2">
+                {currentUser ? (
+                  <div className="p-4 sm:p-5 bg-gradient-to-r from-neutral-50 to-neutral-100 dark:from-neutral-900 dark:to-neutral-900/60 rounded-3xl border border-neutral-200/80 dark:border-neutral-800 flex items-center justify-between gap-4 shadow-sm">
+                    <div className="flex items-center gap-3.5 min-w-0">
+                      <div className="w-12 h-12 rounded-2xl bg-neutral-950 dark:bg-white text-white dark:text-neutral-950 font-extrabold text-lg flex items-center justify-center shadow-md shrink-0">
+                        {currentUser.name.charAt(0).toUpperCase()}
+                      </div>
+                      <div className="min-w-0">
+                        <div className="text-xs text-neutral-400 font-medium">Tài khoản đã đăng nhập</div>
+                        <div className="text-sm sm:text-base font-extrabold text-neutral-950 dark:text-white truncate">
+                          {currentUser.name}
+                        </div>
+                        <div className="text-xs text-neutral-500 dark:text-neutral-400 truncate">
+                          {currentUser.email}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-2 shrink-0">
                       <button
-                        key={c.id}
+                        onClick={() => {
+                          setMobileMenuOpen(false);
+                          onNavigate('profile');
+                        }}
+                        className="px-3.5 py-2 bg-neutral-950 dark:bg-white text-white dark:text-neutral-950 font-bold text-xs rounded-xl hover:opacity-90 active:scale-95 transition-all shadow-sm"
+                      >
+                        Hồ sơ
+                      </button>
+                      <button
+                        onClick={() => {
+                          setMobileMenuOpen(false);
+                          logout();
+                        }}
+                        className="p-2 text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 rounded-xl transition-colors"
+                        title="Đăng xuất"
+                      >
+                        <LogOut className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="p-4 sm:p-5 bg-gradient-to-br from-neutral-950 via-neutral-900 to-neutral-900 text-white rounded-3xl shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 border border-neutral-800">
+                    <div>
+                      <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-rose-600/80 text-white text-[10px] font-bold mb-1">
+                        <Sparkles className="w-3 h-3 text-amber-300" />
+                        <span>ĐẶC QUYỀN THÀNH VIÊN</span>
+                      </div>
+                      <h3 className="text-sm sm:text-base font-extrabold font-['Space_Grotesk']">Chào mừng đến với PY Sneakers!</h3>
+                      <p className="text-xs text-neutral-300 mt-0.5">Đăng nhập để nhận ưu đãi thành viên và theo dõi đơn hàng</p>
+                    </div>
+
+                    <div className="flex items-center gap-2 shrink-0">
+                      <button
+                        id="fullscreen-login-btn"
                         type="button"
                         onClick={() => {
                           setMobileMenuOpen(false);
-                          onNavigate('products', { category: c.slug });
+                          setAuthModalMode('login');
+                          setIsAuthModalOpen(true);
                         }}
-                        className="w-full text-left py-2 px-3 rounded-lg text-xs font-semibold text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 flex items-center justify-between"
+                        className="flex-1 sm:flex-none px-5 py-2.5 bg-white text-neutral-950 font-extrabold text-xs rounded-xl hover:bg-neutral-200 active:scale-95 transition-all shadow-md"
                       >
-                        <span>{c.name}</span>
-                        <ChevronRight className="w-3.5 h-3.5 text-neutral-400" />
+                        Đăng nhập
                       </button>
-                    ))}
+                      <button
+                        id="fullscreen-register-btn"
+                        type="button"
+                        onClick={() => {
+                          setMobileMenuOpen(false);
+                          setAuthModalMode('register');
+                          setIsAuthModalOpen(true);
+                        }}
+                        className="flex-1 sm:flex-none px-5 py-2.5 bg-neutral-800 text-white font-extrabold text-xs rounded-xl hover:bg-neutral-700 active:scale-95 transition-all border border-neutral-700"
+                      >
+                        Đăng ký
+                      </button>
+                    </div>
                   </div>
                 )}
               </div>
 
-              <button
-                id="mob-nav-membership-btn"
-                type="button"
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  onNavigate('membership');
-                }}
-                className="flex items-center gap-2.5 py-2.5 px-3 rounded-xl font-semibold text-xs text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors text-left cursor-pointer"
-              >
-                <ShieldCheck className="w-4 h-4 text-emerald-500" />
-                <span>HỘI VIÊN & ĐẶC QUYỀN</span>
-              </button>
+              {/* Theme Switch & Quick Search for Mobile */}
+              <div className="p-4 sm:p-5 bg-neutral-50 dark:bg-neutral-900/80 rounded-3xl border border-neutral-200/80 dark:border-neutral-800 flex flex-col justify-between gap-3">
+                <div className="text-xs font-bold text-neutral-400 uppercase tracking-wider">Tùy biến giao diện</div>
+                <ThemeToggle id="fullscreen-theme-toggle-btn" variant="expanded" />
+              </div>
 
-              <button
-                id="mob-nav-giftcard-btn"
-                type="button"
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  onNavigate('giftcard');
-                }}
-                className="flex items-center gap-2.5 py-2.5 px-3 rounded-xl font-semibold text-xs text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors text-left cursor-pointer"
-              >
-                <Gift className="w-4 h-4 text-amber-500" />
-                <span>THẺ QUÀ TẶNG GIFT CARD</span>
-              </button>
-
-              <button
-                id="mob-nav-stores-btn"
-                type="button"
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  onNavigate('stores');
-                }}
-                className="flex items-center gap-2.5 py-2.5 px-3 rounded-xl font-semibold text-xs text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors text-left cursor-pointer"
-              >
-                <MapPin className="w-4 h-4 text-neutral-500" />
-                <span>HỆ THỐNG 4 CỬA HÀNG</span>
-              </button>
-
-              <button
-                id="mob-nav-blog-btn"
-                type="button"
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  onNavigate('blog');
-                }}
-                className="flex items-center gap-2.5 py-2.5 px-3 rounded-xl font-semibold text-xs text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors text-left cursor-pointer"
-              >
-                <Clock className="w-4 h-4 text-neutral-500" />
-                <span>TIN TỨC & BẢNG CHỌN SIZE</span>
-              </button>
             </div>
 
-            {/* Popular Brands Shortcuts */}
-            <div className="py-3 border-t border-neutral-100 dark:border-neutral-800 shrink-0">
-              <div className="text-[11px] font-bold text-neutral-400 dark:text-neutral-500 uppercase tracking-wider mb-2">
-                Thương hiệu nổi bật
-              </div>
-              <div className="grid grid-cols-4 gap-2">
-                {brands.slice(0, 4).map(b => (
-                  <button
-                    key={b.id}
-                    type="button"
-                    onClick={() => {
-                      setMobileMenuOpen(false);
-                      onNavigate('products', { brand: b.slug });
-                    }}
-                    className="p-2 rounded-xl bg-neutral-50 dark:bg-neutral-900 border border-neutral-200/80 dark:border-neutral-800 flex flex-col items-center hover:border-neutral-950 dark:hover:border-white transition-all cursor-pointer"
-                  >
-                    <img
-                      src={b.logo}
-                      alt={b.name}
-                      className="w-6 h-6 object-contain rounded"
-                      referrerPolicy="no-referrer"
-                    />
-                    <span className="text-[10px] font-bold text-neutral-800 dark:text-neutral-200 mt-1 truncate w-full text-center">
-                      {b.name}
-                    </span>
-                  </button>
-                ))}
-              </div>
-            </div>
+            {/* 2. NAVIGATION GRID (3 COLUMNS) */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 pt-2">
+              
+              {/* Column 1: Featured Quick Links */}
+              <div className="space-y-3">
+                <div className="flex items-center gap-2 text-xs font-extrabold uppercase tracking-wider text-rose-600 dark:text-rose-400">
+                  <Flame className="w-4 h-4 text-rose-500" />
+                  <span>Khu Vực Nổi Bật</span>
+                </div>
 
-            {/* User Account Drawer Actions */}
-            {currentUser && (
-              <div className="mt-auto pt-3 border-t border-neutral-100 dark:border-neutral-800 space-y-2 shrink-0">
-                {isAdmin && (
+                <div className="space-y-2">
                   <button
-                    id="mob-admin-btn"
-                    type="button"
                     onClick={() => {
                       setMobileMenuOpen(false);
-                      if (onOpenAdmin) onOpenAdmin();
-                      else onNavigate('admin');
+                      onNavigate('products', { filter: 'sale' });
                     }}
-                    className="w-full py-2.5 bg-amber-50 dark:bg-amber-950/60 text-amber-900 dark:text-amber-300 text-xs font-bold rounded-xl flex items-center justify-center gap-2 border border-amber-200/50 dark:border-amber-800/50 cursor-pointer"
+                    className="w-full p-3.5 bg-gradient-to-r from-rose-50 to-orange-50 dark:from-rose-950/40 dark:to-orange-950/30 border border-rose-200 dark:border-rose-900/60 rounded-2xl flex items-center justify-between text-left hover:scale-[1.02] active:scale-98 transition-all group shadow-sm"
                   >
-                    <LayoutDashboard className="w-4 h-4" />
-                    <span>Trang Quản Trị (Admin)</span>
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 bg-rose-600 text-white rounded-xl shadow-md">
+                        <Flame className="w-4 h-4 animate-bounce" />
+                      </div>
+                      <div>
+                        <div className="text-xs font-extrabold text-rose-600 dark:text-rose-400">SĂN SALE KHỦNG 2025</div>
+                        <div className="text-[11px] text-neutral-500 dark:text-neutral-400">Giảm giá sâu lên đến 40%</div>
+                      </div>
+                    </div>
+                    <span className="text-[10px] bg-rose-600 text-white px-2 py-1 rounded-lg font-extrabold">-40%</span>
                   </button>
-                )}
-                <div className="grid grid-cols-2 gap-2">
+
                   <button
-                    type="button"
                     onClick={() => {
                       setMobileMenuOpen(false);
-                      onNavigate('profile');
+                      onNavigate('products', { filter: 'new' });
                     }}
-                    className="py-2 px-3 bg-neutral-100 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 text-xs font-semibold rounded-xl text-center hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors cursor-pointer"
+                    className="w-full p-3.5 bg-neutral-50 dark:bg-neutral-900/80 border border-neutral-200/80 dark:border-neutral-800 rounded-2xl flex items-center justify-between text-left hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-all group"
                   >
-                    Hồ sơ cá nhân
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 bg-amber-500 text-white rounded-xl shadow-sm">
+                        <Sparkles className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <div className="text-xs font-extrabold text-neutral-900 dark:text-white">HÀNG MỚI VỀ (NEW)</div>
+                        <div className="text-[11px] text-neutral-500 dark:text-neutral-400">Bản phát hành hot tuần này</div>
+                      </div>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-neutral-400 group-hover:translate-x-1 transition-transform" />
                   </button>
+
                   <button
-                    id="mob-logout-btn"
-                    type="button"
                     onClick={() => {
                       setMobileMenuOpen(false);
-                      logout();
+                      onNavigate('products', { filter: 'bestseller' });
                     }}
-                    className="py-2 px-3 bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 text-xs font-semibold rounded-xl text-center hover:bg-rose-100 transition-colors cursor-pointer"
+                    className="w-full p-3.5 bg-neutral-50 dark:bg-neutral-900/80 border border-neutral-200/80 dark:border-neutral-800 rounded-2xl flex items-center justify-between text-left hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-all group"
                   >
-                    Đăng xuất
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 bg-sky-500 text-white rounded-xl shadow-sm">
+                        <Layers className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <div className="text-xs font-extrabold text-neutral-900 dark:text-white">BÁN CHẠY NHẤT</div>
+                        <div className="text-[11px] text-neutral-500 dark:text-neutral-400">Được sneakerhead yêu thích nhất</div>
+                      </div>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-neutral-400 group-hover:translate-x-1 transition-transform" />
                   </button>
                 </div>
               </div>
-            )}
+
+              {/* Column 2: Categories Showcase */}
+              <div className="space-y-3">
+                <div className="flex items-center justify-between text-xs font-extrabold uppercase tracking-wider text-neutral-950 dark:text-white">
+                  <span className="flex items-center gap-2">
+                    <Package className="w-4 h-4 text-neutral-500" />
+                    <span>Danh Mục Giày</span>
+                  </span>
+                  <button
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      onNavigate('products');
+                    }}
+                    className="text-[11px] text-neutral-500 hover:text-rose-600 dark:hover:text-rose-400 font-bold"
+                  >
+                    Xem tất cả &rarr;
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2">
+                  {categories.slice(0, 6).map(cat => (
+                    <button
+                      key={cat.id}
+                      onClick={() => {
+                        setMobileMenuOpen(false);
+                        onNavigate('products', { category: cat.slug });
+                      }}
+                      className="p-2.5 rounded-2xl bg-neutral-50 dark:bg-neutral-900/80 border border-neutral-200/80 dark:border-neutral-800 hover:border-neutral-950 dark:hover:border-white text-left transition-all group"
+                    >
+                      <div className="w-full aspect-video rounded-xl overflow-hidden mb-2 bg-neutral-100 dark:bg-neutral-800">
+                        <img
+                          src={cat.image}
+                          alt={cat.name}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          referrerPolicy="no-referrer"
+                        />
+                      </div>
+                      <div className="text-xs font-bold text-neutral-900 dark:text-white group-hover:text-rose-600 dark:group-hover:text-rose-400 truncate">
+                        {cat.name}
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Column 3: Brands & Services */}
+              <div className="space-y-3">
+                <div className="text-xs font-extrabold uppercase tracking-wider text-neutral-950 dark:text-white flex items-center gap-2">
+                  <Sparkles className="w-4 h-4 text-amber-500" />
+                  <span>Thương Hiệu & Dịch Vụ</span>
+                </div>
+
+                {/* Brands Logos Grid */}
+                <div className="grid grid-cols-4 gap-2 mb-3">
+                  {brands.slice(0, 8).map(brand => (
+                    <button
+                      key={brand.id}
+                      onClick={() => {
+                        setMobileMenuOpen(false);
+                        onNavigate('products', { brand: brand.slug });
+                      }}
+                      className="p-2 rounded-2xl bg-neutral-50 dark:bg-neutral-900/80 border border-neutral-200/80 dark:border-neutral-800 hover:border-neutral-950 dark:hover:border-white flex flex-col items-center justify-center transition-all group"
+                    >
+                      <img
+                        src={brand.logo}
+                        alt={brand.name}
+                        className="w-7 h-7 object-contain rounded mb-1"
+                        referrerPolicy="no-referrer"
+                      />
+                      <span className="text-[10px] font-bold text-neutral-900 dark:text-white truncate w-full text-center">
+                        {brand.name}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+
+                {/* Extra Utility Links */}
+                <div className="grid grid-cols-1 gap-2 pt-1 border-t border-neutral-100 dark:border-neutral-800">
+                  <button
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      onNavigate('membership');
+                    }}
+                    className="w-full p-2.5 rounded-xl hover:bg-neutral-100 dark:hover:bg-neutral-800 flex items-center gap-3 text-xs font-bold text-neutral-800 dark:text-neutral-200 transition-colors"
+                  >
+                    <ShieldCheck className="w-4 h-4 text-emerald-500 shrink-0" />
+                    <span>Hội Viên & Đặc Quyền Tích Điểm</span>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      onNavigate('giftcard');
+                    }}
+                    className="w-full p-2.5 rounded-xl hover:bg-neutral-100 dark:hover:bg-neutral-800 flex items-center gap-3 text-xs font-bold text-neutral-800 dark:text-neutral-200 transition-colors"
+                  >
+                    <Gift className="w-4 h-4 text-amber-500 shrink-0" />
+                    <span>Thẻ Quà Tặng Gift Card</span>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      onNavigate('stores');
+                    }}
+                    className="w-full p-2.5 rounded-xl hover:bg-neutral-100 dark:hover:bg-neutral-800 flex items-center gap-3 text-xs font-bold text-neutral-800 dark:text-neutral-200 transition-colors"
+                  >
+                    <MapPin className="w-4 h-4 text-rose-500 shrink-0" />
+                    <span>Hệ Thống 4 Cửa Hàng Toàn Quốc</span>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      onNavigate('blog');
+                    }}
+                    className="w-full p-2.5 rounded-xl hover:bg-neutral-100 dark:hover:bg-neutral-800 flex items-center gap-3 text-xs font-bold text-neutral-800 dark:text-neutral-200 transition-colors"
+                  >
+                    <Clock className="w-4 h-4 text-neutral-400 shrink-0" />
+                    <span>Tin Tức & Bảng Quy Đổi Size</span>
+                  </button>
+                </div>
+
+              </div>
+
+            </div>
+
+            {/* 3. FOOTER INFO INSIDE FULLSCREEN MENU */}
+            <div className="pt-6 border-t border-neutral-200 dark:border-neutral-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-neutral-500 dark:text-neutral-400">
+              <div className="flex flex-wrap items-center gap-4">
+                <span>Hotline: <strong className="text-neutral-900 dark:text-white">0908 123 456</strong></span>
+                <span>•</span>
+                <span>Email: <strong className="text-neutral-900 dark:text-white">phatht@tcr.vn</strong></span>
+                <span>•</span>
+                <span>Cam kết chính hãng 100%</span>
+              </div>
+
+              {isAdmin && (
+                <button
+                  id="fullscreen-admin-btn"
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    if (onOpenAdmin) onOpenAdmin();
+                    else onNavigate('admin');
+                  }}
+                  className="px-4 py-2 bg-amber-500 text-white font-bold text-xs rounded-xl flex items-center gap-2 hover:bg-amber-600 transition-all shadow-sm"
+                >
+                  <LayoutDashboard className="w-4 h-4" />
+                  <span>Trang Quản Trị Admin</span>
+                </button>
+              )}
+            </div>
 
           </div>
         </div>,

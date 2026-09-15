@@ -85,10 +85,13 @@ export const BlogListPage: React.FC<BlogListPageProps> = ({ onNavigate }) => {
             <div>
               <div className="relative aspect-video overflow-hidden bg-neutral-100">
                 <img
-                  src={post.coverImage}
+                  src={post.coverImage || post.featuredImage || post.image || 'https://images.unsplash.com/photo-1552346154-21d32810aba3?w=800&auto=format&fit=crop&q=80'}
                   alt={post.title}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   referrerPolicy="no-referrer"
+                  onError={(e) => {
+                    (e.currentTarget as HTMLImageElement).src = 'https://images.unsplash.com/photo-1552346154-21d32810aba3?w=800&auto=format&fit=crop&q=80';
+                  }}
                 />
                 <div className="absolute top-3 left-3">
                   <span className="px-2.5 py-1 bg-neutral-950/80 backdrop-blur-md text-white text-[10px] font-bold rounded-lg">

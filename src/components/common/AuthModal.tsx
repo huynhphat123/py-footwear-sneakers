@@ -23,7 +23,13 @@ export const AuthModal: React.FC = () => {
     showToast,
   } = useShop();
 
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState(() => {
+    try {
+      return localStorage.getItem('solevault_remembered_email') || '';
+    } catch {
+      return '';
+    }
+  });
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [name, setName] = useState('');
@@ -41,7 +47,7 @@ export const AuthModal: React.FC = () => {
   const [confirmPasswordError, setConfirmPasswordError] = useState('');
   const [phoneError, setPhoneError] = useState('');
 
-  // Reset errors when mode changes
+  // Reset errors and re-populate remembered email when mode changes
   useEffect(() => {
     setEmailError('');
     setPasswordError('');
@@ -51,6 +57,13 @@ export const AuthModal: React.FC = () => {
     setConfirmPassword('');
     setShowPassword(false);
     setShowConfirmPassword(false);
+
+    try {
+      const remembered = localStorage.getItem('solevault_remembered_email');
+      if (remembered && !email) {
+        setEmail(remembered);
+      }
+    } catch {}
   }, [authModalMode, isAuthModalOpen]);
 
   if (!isAuthModalOpen) return null;
@@ -125,9 +138,21 @@ export const AuthModal: React.FC = () => {
     setIsSubmitting(true);
     try {
       if (authModalMode === 'login') {
-        await login(email, password);
+        const success = await login(email, password);
+        if (success) {
+          if (rememberMe) {
+            localStorage.setItem('solevault_remembered_email', email.trim());
+          } else {
+            localStorage.removeItem('solevault_remembered_email');
+          }
+        }
       } else {
-        await register(name, email, phone, password);
+        const success = register(name, email, phone, password);
+        if (success) {
+          if (rememberMe) {
+            localStorage.setItem('solevault_remembered_email', email.trim());
+          }
+        }
       }
     } finally {
       setIsSubmitting(false);
